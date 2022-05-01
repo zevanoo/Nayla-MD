@@ -1,0 +1,22 @@
+//created by Scooppt
+let fetch = require('node-fetch')
+
+let handler  = async (m, { conn, text }) => {
+  try {
+    let res = await fetch('https://random.dog/woof.json')
+    let json = await res.json()
+    if (json.status) throw json
+    conn.sendFile(m.chat, json.url, 'dog.jpg', mess.sukses, m)
+   } catch (e) {
+        console.log(e)
+        throw '_*Error!*_'
+    }
+}
+
+handler.help = ['dog']
+handler.tags = ['images']
+handler.command = /^dog$/i
+
+handler.fail = null
+
+module.exports = handler
