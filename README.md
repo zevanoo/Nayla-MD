@@ -61,11 +61,7 @@
 
 ```bash
  heroku/nodejs
-<<<<<<< HEAD
- https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest
-=======
  https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest.git
->>>>>>> 36895fd (merapihkan)
  https://github.com/DuckyTeam/heroku-buildpack-imagemagick.git
 ```
 
