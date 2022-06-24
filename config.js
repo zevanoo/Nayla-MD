@@ -10,6 +10,11 @@ global.Owner = {
         isDev: true
     }
 }
+global.ext = {
+	title: 'Sabar sedang di proses',
+	body: 'NayLa-B0TZ',
+	thum: 'https://telegra.ph/file/5859353a380d9b67be198.jpg'
+}
 global.mods = ['6283897390164'] // Want some help?
 global.prems = JSON.parse(fs.readFileSync('./src/premium.json')) // Premium user has unlimited limit
 global.DeveloperMode = 'false' // true or false
@@ -22,11 +27,6 @@ global.mesreport = 50
 global.botname = 'NAYLA-BOTZ'
 global.thumnail = ext.thum // It's hard to change if you don't get an error
 global.thum = ext.thum // Same as above
-global.ext = {
-	title: 'Sabar sedang di proses',
-	body: 'NayLa-B0TZ',
-	thum: 'https://telegra.ph/file/5859353a380d9b67be198.jpg'
-}
     global.mess = {
 	wait: '*❏ WAIT TUNGGU*',
 	error: '*❏ ERROR CUK*',

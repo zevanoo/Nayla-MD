@@ -40,7 +40,7 @@ global.db = new Low(
 global.DATABASE = global.db // Backwards Compatibility
 
 global.conn = new WAConnection()
-conn.version = [2, 2218, 8]
+conn.version = [2, 2222, 11]
 conn.browserDescription = ['NAYLA-BOTZ','Safari','3.0']
 let authFile = `${opts._[0] || global.sessionName}.json`
 if (fs.existsSync(authFile)) conn.loadAuthInfo(authFile)
