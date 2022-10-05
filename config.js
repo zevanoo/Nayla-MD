@@ -15,7 +15,7 @@ global.ext = {
 	body: 'NayLa-B0TZ',
 	thum: 'https://telegra.ph/file/5859353a380d9b67be198.jpg'
 }
-global.mods = ['6283897390164'] // Want some help?
+global.mods = ['62895327999292'] // Want some help?
 global.prems = JSON.parse(fs.readFileSync('./src/premium.json')) // Premium user has unlimited limit
 global.DeveloperMode = 'false' // true or false
 global.linkGC = ['https://chat.whatsapp.com/JgFOfu182li7kG6dlKcwzD']
