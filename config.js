@@ -3,8 +3,8 @@ let chalk = require('chalk')
 
 global.Owner = {
     // use the phone number with the country code, for example Indonesia '62' America '1' etc
-    '628818770766': { // 628818770766
-        name: 'Zevano',
+    '62895352857377': { // 62895352857377
+        name: 'Zeltoria',
         isReport: true, // if true this number will send if user use command /report or /join
         isCreator: true, // if true this number will send if user use command /owner or /creator
         isDev: true
@@ -12,24 +12,23 @@ global.Owner = {
 }
 global.ext = {
 	title: 'Sabar sedang di proses',
-	body: 'NayLa-B0TZ',
-	thum: 'https://telegra.ph/file/5859353a380d9b67be198.jpg'
+	body: 'Elistz',
+	thum: 'content://0@com.android.chrome.FileProvider/images/screenshot/1669845072433-1510380451.jpg'
 }
 global.mods = ['6283897390164'] // Want some help?
 global.prems = JSON.parse(fs.readFileSync('./src/premium.json')) // Premium user has unlimited limit
 global.DeveloperMode = 'false' // true or false
-global.linkGC = ['https://chat.whatsapp.com/JgFOfu182li7kG6dlKcwzD']
-global.packname = 'NayLa-B0TZ'
-global.author = 'Zevano'
+global.packname = 'Elistz'
+global.author = 'Zeltoria'
 global.multiplier = 36 // The higher, The harder levelup
-global.sessionName = 'nayla' // The Session name behind the .json example is nayla.json
+global.sessionName = 'Elistz' // The Session name behind the .json example is nayla.json
 global.mesreport = 50
-global.botname = 'NAYLA-BOTZ'
+global.botname = 'Elistz'
 global.thumnail = ext.thum // It's hard to change if you don't get an error
 global.thum = ext.thum // Same as above
     global.mess = {
-	wait: '*❏ WAIT TUNGGU*',
-	error: '*❏ ERROR CUK*',
+	wait: '*❏ WAIT*',
+	error: '*❏ ERROR Njirr*',
 	owner: 'Maaf fitur ini hanya bisa digunakan oleh *Owner*',
 	mods: 'Maaf fitur ini hanya bisa digunakan oleh *Moderator*',
 	premium: 'Maaf fitur ini hanya bisa digunakan oleh user *Premium*',
@@ -38,15 +37,15 @@ global.thum = ext.thum // Same as above
 	admin: 'Maaf fitur ini hanya bisa digunakan *Admin*',
     botAdmin: 'Jadikan bot sebagai *Admin* untuk menggunakan fitur ini',
     unreg: '── 「 NOT REGISTERED 」 ──\nSilakan Register Terlebih Dahulu Sebelum Menggunakan Bot. Cara Register Cukup Dengan Command *.daftar nama.umur*\nContoh .daftar ' + global.botname + '.16\n\nNote\nHarap Save Serial Number Mu Agar Bisa Melakukan Unreg Database Bot',
-    sukses: 'Done Ya kawand',
+    sukses: 'Done Ya Sayang',
     wm: '© nayla',
     wel: 'Hai @user\n◪ Welcome in group:\n├─ @subject\n├─ Intro dulu\n├─ ❏ Nama: \n├─ ❏ Umur: \n├─ ❏ Asal kota: \n├─ ❏ Kelas: \n├─ ❏ Jenis kelamin:',
-    bye: 'Selamat Tinggal @user!\nTerimakasih Telah Bergabung Di Grup\n\nKalo Balik Jangan Lupa Bawa Gorengan Buat Anggota Disini',
+    bye: 'Selamat Tinggal @user!\nTerimakasih Telah Bergabung Di Grup\n\nSemoga Harimu Suram',
     promote: '「 PROMOTE - DETECTED 」\nTarget : @user\nStatus : Member -> Admin\nSELAMAT KAMU JADI ADMIN',
     demote: '「 DEMOTE - DETECTED 」\nTarget : @user\nStatus : Admin -> Member\nYAHAHA KASIAN KENA DEMOTE'
 }
     global.adven = {
-	limit: 100,
+	limit: 20,
 	tigame: 100,
 	money: 100000
 }
