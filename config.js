@@ -3,8 +3,8 @@ let chalk = require('chalk')
 
 global.Owner = {
     // use the phone number with the country code, for example Indonesia '62' America '1' etc
-    '628818770766': { // 628818770766
-        name: 'Zevano',
+    '': { 923080613785// 923080613785
+        name: 'Devil',
         isReport: true, // if true this number will send if user use command /report or /join
         isCreator: true, // if true this number will send if user use command /owner or /creator
         isDev: true
@@ -15,7 +15,7 @@ global.ext = {
 	body: 'NayLa-B0TZ',
 	thum: 'https://telegra.ph/file/5859353a380d9b67be198.jpg'
 }
-global.mods = ['6283897390164'] // Want some help?
+global.mods = ['923080613785'] // Want some help?
 global.prems = JSON.parse(fs.readFileSync('./src/premium.json')) // Premium user has unlimited limit
 global.DeveloperMode = 'false' // true or false
 global.linkGC = ['https://chat.whatsapp.com/JgFOfu182li7kG6dlKcwzD']
