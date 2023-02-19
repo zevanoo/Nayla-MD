@@ -28,7 +28,7 @@
 ---
 
 
-## Information
+## Informasi
 
 > NayLa-B0TZ adalah bot yang saya buat dan kembangkan sendiri
 > Jika kamu menemukan semacam bug, harap untuk dimaklumi hehe
@@ -36,7 +36,7 @@
 
 ---------
 
-## Bugs and Tester
+## Bug and Tester (Penguji)
 
 * Jika kamu menemukan bug jangan lupa buka Issues
 * Info Lebih Lanjut, Chat [owner-nayla](https://wa.me/6289520306297)
@@ -44,17 +44,17 @@
 
 ---------
 
-# Requirements
-* [Node.js](https://nodejs.org/en/)
-* [Git](https://git-scm.com/downloads)
-* [FFmpeg](https://ffmpeg.org/download.html)
-* [Imagemagick](https://imagemagick.org/script/download.php)
+# Persyaratan
+* [Node.js](https://nodejs.org/en/) (npm)
+* [Git](https://git-scm.com/downloads) (git)
+* [FFmpeg](https://ffmpeg.org/download.html) (ffmpeg)
+* [Imagemagick](https://imagemagick.org/script/download.php) (imagemagick)
 
 ---------
 
 # Instalasi
 
-## For Heroku
+## Untuk Heroku
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/zevoffc/nayla)
 
 ### Buildpack
@@ -66,7 +66,7 @@
 ```
 
 
-## For Windows/RDP
+## Untuk Windows/RDP
 
 ```bash
 git clone https://github.com/zevoffc/nayla.git
@@ -76,7 +76,7 @@ node .
 ```
 
 
-## Installing the FFmpeg for Windows
+## Install FFmpeg untuk Windows
 
 * Unduh salah satu versi FFmpeg yang tersedia dengan mengklik [di sini](https://ffmpeg.org/download.html).
 * Extract file ke `C:\` path.
@@ -96,7 +96,7 @@ Jika berhasil, akan memberikanmu pesan seperti: `SUCCESS: specified value was sa
 ```
 
 
-## For Termux
+## Untuk Termux
 
 Untuk termux hilangkan fitur yg menggunakan canvas
 
@@ -115,7 +115,7 @@ node .
 ```
 
 
-## For Replit
+## Untuk Replit
 [![Run on Repl.it](https://repl.it/badge/github/zevoffc/nayla)](https://repl.it/github/zevoffc/nayla)
 
 * klik button
@@ -130,7 +130,7 @@ node . (option)
 
 ## Edit file
 
-- Change information on [this section](https://github.com/zevoffc/nayla/edit/main/config.js)
+- Ubah informasi di [bagian disini masbro](https://github.com/zevoffc/nayla/edit/main/config.js)
 
 
 ---------
