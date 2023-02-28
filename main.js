@@ -69,7 +69,7 @@ global.loadDatabase = async function loadDatabase() {
 loadDatabase()
 
 
-global.authFile = `${opts._[0] || global.sessionName}.data.json`
+global.authFile = `${opts._[0] || global.sessionName}.json`
 const { state, saveState } = useSingleFileAuthState(global.authFile)
 
 const logger = pino({
