@@ -15,9 +15,9 @@ let totalf = Object.values(global.plugins).filter(
 const defaultMenu = {
   before:`
 ┏━━━━━━─────┈ ⳹
-┃╔━─⟢⟨ ${global.namebot} ⟩⟣
+┃╔━─⟢⟨ ${global.botname} ⟩⟣
 ┇┃ ➯𝙊𝙬𝙣𝙚𝙧 : Zevano
-┃║ ➯𝘽𝙊𝙏 : ${global.namebot }
+┃║ ➯𝘽𝙊𝙏 : ${global.botname}
 ┇┃ ➯𝙐𝙥𝙩𝙞𝙢𝙚 : %uptime
 ┃║ ➯𝘿𝙖𝙩𝙖𝙗𝙖𝙨𝙚 : %rtotalreg
 ┃❏
@@ -333,7 +333,7 @@ const template = generateWAMessageFromContent(m.key.remoteJid, proto.Message.fro
             description: menuu,
             buttonText: 'LIST MENU',
             listType: 1,
-            footerText: `┌────「 *${namebot}* 」───⬣
+            footerText: `┌────「 *${global.botname}* 」───⬣
 │⬡ Aktif selama ${uptime}
 │⬡ ${Object.keys(global.db.data.users).length} Pengguna
 │⬡ Mode : ${global.opts['self'] ? 'Self' : 'publik'}
