@@ -13,7 +13,7 @@
 <a href="https://github.com/zevoffc/nayla"><img title="Open Source" src="https://badges.frapsoft.com/os/v2/open-source.svg?v=103"></a>
 <a href="https://github.com/zevoffc/nayla/"><img title="Size" src="https://img.shields.io/github/repo-size/zevoffc/nayla?style=flat-square&color=green"></a>
 <a href="https://hits.seeyoufarm.com"><img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fzevoffc%2Fnayla&count_bg=%2379C83D&title_bg=%23555555&icon=probot.svg&icon_color=%2300FF6D&title=hits&edge_flat=false"/></a>
-<a href="https://github.com/zevoffc/nayla/graphs/commit-activity"><img height="20" src="https://img.shields.io/badge/Maintained%3F-yes-green.svg"></a>&nbsp;&nbsp;
+<a href="https://github.com/zevoffc/nayla/graphs/commit-activity"><img height="20" src="https://img.shields.io/badge/Maintained%3F-no-green.svg"></a>&nbsp;&nbsp;
 </p>
 
 <p align="center">
@@ -29,24 +29,24 @@
 > NayLa-B0TZ adalah bot yang saya buat dan kembangkan sendiri
 > Jika kamu menemukan semacam bug, harap untuk dimaklumi hehe
 
-
+---------
 
 # Bugs and Tester
 
 * Jika kamu menemukan bug jangan lupa buka Issues
 * Info Lebih Lanjut, Chat [owner-nayla](https://wa.me/6289520306297)
 
-
+---------
 
 # Join Group NAYLA UPDATES & NOTIF
 [![Grup WhatsApp](https://img.shields.io/badge/WhatsApp%20Group-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](https://chat.whatsapp.com/IS1V1LKUy16Fjd08uPtTdP) 
 
-
+---------
 
 # Edit file
 * Change information on [this section](https://github.com/zevoffc/nayla/edit/main/config.js)
 
-
+---------
 
 # Support Run
 | Running | Check |
@@ -57,9 +57,9 @@
 | **VPS** |[✔️](https://github.com/zevoffc) |
 | **WINDOWS** |[✔️](https://github.com/zevoffc) |
 
+---------
 
 # Installations
-
 
 ## For Termux User
 1. Type mentioned below given commands one by one in Termux.
@@ -117,7 +117,7 @@ yarn
 node .
 ```
 
-
+---------
 
 # Options for this script
 
@@ -154,18 +154,21 @@ If enabled, **tmp* folder contain files will be auto delete
 ## `--test`
 * **Development** Testing Mode
 
-
+---------
 
 # Donate
 - [Saweria](https://saweria.co/Scaff)
 
-
+---------
 
 # Thanks To 
-**Allah SWT**
-**Orang Tua**
-**Semua yang selalu mendukung**
+* **Allah SWT**
+
+* **Orang Tua**
+
+* **Semua yang selalu mendukung**
 
 
 ### Special Thanks to
+
 [![Zevano](https://github.com/zevoffc.png?size=100)](https://github.com/zevoffc)
