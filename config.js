@@ -41,7 +41,7 @@ title: "Sabar sedang di proses",
 body: "NayLa-B0TZ",
 thum: "https://telegra.ph/file/5859353a380d9b67be198.jpg"
 }
-global.wm = "© nayla\nTanggal = " + hari + " "+ tanggal + " " + bulan + " " + tahun + "\nJam : " + jamNow + " " + menitNow + " " + detikNow + "\nUptime : ${clockString(process.uptime() * 1000)}"
+global.wm = "© nayla"
 global.mess = {
 wm: global.wm,
 sukses: "Done Ya kawand",

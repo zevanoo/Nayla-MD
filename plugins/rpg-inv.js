@@ -33,7 +33,7 @@ let handler = async (m, { conn, usedPrefix }) => {
     let exp = global.db.data.users[m.sender].exp
     let sampah = global.db.data.users[m.sender].sampah
     let { max } = levelling.xpRange(level, exp, global.multiplier)
-    let name = m.fromMe ? conn.user : conn.contacts[m.sender]
+    let name = conn.getName(m.sender)
     let sortedmoney = Object.entries(global.db.data.users).sort((a, b) => b[1].money - a[1].money)
     let sortedlevel = Object.entries(global.db.data.users).sort((a, b) => b[1].level - a[1].level)
     let sorteddiamond = Object.entries(global.db.data.users).sort((a, b) => b[1].diamond - a[1].diamond)
