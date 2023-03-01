@@ -1,11 +1,4 @@
 //=============『 Gosah diubah 』================== //
-const  { tahun, bulan, tanggal, hari, jams, jamNow, menitNow, detikNow } = require('./system/lib/timedate')
-function clockString(ms) {
-  let h = isNaN(ms) ? "--" : Math.floor(ms / 3600000)
-  let m = isNaN(ms) ? "--" : Math.floor(ms / 60000) % 60
-  let s = isNaN(ms) ? "--" : Math.floor(ms / 1000) % 60
-  return [h, m, s].map(v => v.toString().padStart(2, 0) ).join(":")
-}
 let fs = require('fs')
 //=============『 Utama 』================== //
 global.Owner = {
@@ -41,7 +34,7 @@ title: "Sabar sedang di proses",
 body: "NayLa-B0TZ",
 thum: "https://telegra.ph/file/5859353a380d9b67be198.jpg"
 }
-global.wm = "© nayla"
+global.wm = '© nayla'
 global.mess = {
 wm: global.wm,
 sukses: "Done Ya kawand",
