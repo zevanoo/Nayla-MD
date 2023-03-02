@@ -1,4 +1,4 @@
-let { default: makeWASocket, BufferJSON, WA_DEFAULT_EPHEMERAL, generateWAMessageFromContent, downloadContentFromMessage, downloadHistory, proto, getMessage, generateWAMessageContent, prepareWAMessageMedia } = require('@adiwajshing/baileys')
+let { generateWAMessageFromContent, proto, prepareWAMessageMedia } = require('@adiwajshing/baileys')
 let levelling = require('../system/lib/levelling')
 let fs = require('fs')
 const util = require('util')
@@ -16,7 +16,7 @@ const defaultMenu = {
   before:`
 ┏━━━━━━─────┈ ⳹
 ┃╔━─⟢⟨ ${global.botname} ⟩⟣
-┇┃ ➯𝙊𝙬𝙣𝙚𝙧 : Zevano
+┇┃ ➯𝙊𝙬𝙣𝙚𝙧 : ${global.Owner[0].name}
 ┃║ ➯𝘽𝙊𝙏 : ${global.botname}
 ┇┃ ➯𝙐𝙥𝙩𝙞𝙢𝙚 : %uptime
 ┃║ ➯𝘿𝙖𝙩𝙖𝙗𝙖𝙨𝙚 : %rtotalreg
@@ -308,7 +308,7 @@ const ftroli = {
     surface : 1,
     message: `Hai Kak ${name}!`, 
     orderTitle: `▮Menu ▸`,
-    thumbnail: await (await fetch(global.ext.thum + 'Menu')).buffer(),
+    thumbnail: await (await fetch(global.ext.thum)).buffer(),
     sellerJid: '0@s.whatsapp.net' 
     }
     }
@@ -583,7 +583,7 @@ const template = generateWAMessageFromContent(m.key.remoteJid, proto.Message.fro
     }
     
     text = text.replace(new RegExp(`%(${Object.keys(replace).sort((a, b) => b.length - a.length).join`|`})`, 'g'), (_, name) => '' + replace[name])
-    let message = await prepareWAMessageMedia({ image: await (await require('node-fetch')(fotonya2)).buffer()}, { upload: conn.waUploadToServer }) 
+    let message = await prepareWAMessageMedia({ image: await (await fetch(global.ext.thum)).buffer()}, { upload: conn.waUploadToServer }) 
       const template = generateWAMessageFromContent(m.chat, proto.Message.fromObject({
       templateMessage: {
           hydratedTemplate: {

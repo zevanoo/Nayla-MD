@@ -60,6 +60,7 @@ demote: "「 DEMOTE - DETECTED 」\nTarget : @user\nStatus : Admin -> Member\nYA
 global.packname = "NayLa-B0TZ"
 global.author = "Zevano"
 global.mesreport = 50
+global.expc = 15
 
 
 //=============『 Adventure 』================== //

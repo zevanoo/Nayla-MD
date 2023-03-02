@@ -266,7 +266,6 @@ async function _quickTest() {
   if (!s.convert && !s.magick && !s.gm) conn.logger.warn('Stickers may not work without imagemagick if libwebp on ffmpeg doesnt isntalled (pkg install imagemagick)')
 }
 
-conn.sendMessage(`6289520306297@s.whatsapp.net`, {text: '♨︎O̳K̳ B̳O̳T̳ B̳E̳R̳H̳A̳S̳I̳L̳ T̳E̳R̳H̳U̳B̳U̳N̳G̳' })
 _quickTest()
   .then(() => conn.logger.info('Quick Test Done'))
   .catch(console.error)

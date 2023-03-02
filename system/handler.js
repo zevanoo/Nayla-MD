@@ -626,7 +626,7 @@ module.exports = {
                         continue
                     }
                     m.isCommand = true
-                    let xp = 'exp' in plugin ? parseInt(plugin.exp) : 17 // XP Earning per command
+                    let xp = 'exp' in plugin ? parseInt(plugin.exp) : global.expc // XP Earning per command
                     if (xp > 9999999999999999999999) m.reply('Ngecit -_-') // Hehehe
                     else m.exp += xp
                     if (!isPrems && plugin.limit && global.db.data.users[m.sender].limit < plugin.limit * 1) {
