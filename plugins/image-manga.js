@@ -16,7 +16,7 @@ let handler = async (m, { conn, args }) => {
   conn.sendFile(m.chat, res, 'manga.jpg', mess.sukses, m, false)
 }
 handler.help = ['manga'].map(v => v + ' ')
-handler.tags = ['anime']
+handler.tags = ['image']
 
 handler.command = /^(manga)$/i
 handler.owner = false

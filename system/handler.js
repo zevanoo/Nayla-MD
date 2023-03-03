@@ -814,6 +814,11 @@ ketik *.on delete* untuk mematikan pesan ini
     this.sendButton(jid, caption, watermark, 'Matikan', ',off desc')
 
   }
+},
+async UnReg() {
+await conn.sendButtonLoc(m.chat, await(await fetch(global.ext.thum)).buffer(), `
+${global.mess.msg.unreg}
+`.trim(), mess.wm, 'daftar', `.daftar`)
 }
 
 global.dfail = (type, m, conn) => {
@@ -826,7 +831,7 @@ global.dfail = (type, m, conn) => {
         private: mess.msg.private,
         admin: mess.msg.admin,
         botAdmin: mess.msg.botAdmin,
-        unreg: mess.msg.unreg,
+        unreg: UnReg()
     }[type]
     if (msg) return m.reply(msg)
 }

@@ -48,7 +48,7 @@ group: "Maaf fitur ini hanya bisa digunakan di *Group*",
 private: "Maaf fitur ini hanya bisa digunakan di *Private*",
 admin: "Maaf fitur ini hanya bisa digunakan *Admin*",
 botAdmin: "Jadikan bot sebagai *Admin* untuk menggunakan fitur ini",
-unreg: "── 「 NOT REGISTERED 」 ──\nSilakan Register Terlebih Dahulu Sebelum Menggunakan Bot. Cara Register Cukup Dengan Command *.daftar nama.umur*\nContoh .daftar " + global.botname + ".16\n\nNote\nHarap Save Serial Number Mu Agar Bisa Melakukan Unreg Database Bot",
+unreg: "── 「 NOT REGISTERED 」 ──\nSilakan Register Terlebih Dahulu Sebelum Menggunakan Bot. Dengan cara klik tombol dibawah untuk melakukan register",
 },
     announce: {
 wel: "Hai @user\n◪ Welcome in group:\n├─ @subject\n├─ Intro dulu\n├─ ❏ Nama: \n├─ ❏ Umur: \n├─ ❏ Asal kota: \n├─ ❏ Kelas: \n├─ ❏ Jenis kelamin:",
