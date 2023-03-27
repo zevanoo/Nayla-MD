@@ -807,7 +807,7 @@ ketik *.on delete* untuk mematikan pesan ini
   }
 }
 
-global.dfail = (type, m, zev) => {
+global.dfail = (type, m, conn) => {
     let msg = {
         rowner: mess.msg.owner,
         owner: mess.msg.owner,
@@ -824,7 +824,7 @@ global.dfail = (type, m, zev) => {
 	let msgg = {
         unreg: mess.msg.unreg
         }[type]
-    let button = async (m, fetch) => {
+    let button = async () => {
 await conn.sendButtonLoc(m.chat, await(await fetch(global.ext.thum)).buffer(), `
 ${msgg}
 `.trim(), mess.wm, 'daftar', `.daftar`)
