@@ -1,6 +1,7 @@
 const simple = require('./lib/simple')
 const util = require('util')
 const { color } = require('./lib/color')
+const fetch = require('node-fetch')
 const moment = require("moment-timezone")
 
 const isNumber = x => typeof x === 'number' && !isNaN(x)
@@ -803,25 +804,10 @@ ketik *.on delete* untuk mematikan pesan ini
       this.sendJSON(nodePayload, tag)
       m.reply(`Kamu dibanned karena menelepon bot, owner : @${owner[0]}`)
     }
-  },
-  async GroupUpdate({ jid, desc, descId, descTime, descOwner, announce }) {
-    if (!db.data.chats[jid].desc) return
-    if (!desc) return
-    let caption = `
-    @${descOwner.split`@`[0]} telah mengubah deskripsi grup.
-    ${desc}
-        `.trim()
-    this.sendButton(jid, caption, watermark, 'Matikan', ',off desc')
-
   }
-},
-async UnReg() {
-await conn.sendButtonLoc(m.chat, await(await fetch(global.ext.thum)).buffer(), `
-${global.mess.msg.unreg}
-`.trim(), mess.wm, 'daftar', `.daftar`)
 }
 
-global.dfail = (type, m, conn) => {
+global.dfail = (type, m, zev) => {
     let msg = {
         rowner: mess.msg.owner,
         owner: mess.msg.owner,
@@ -830,10 +816,20 @@ global.dfail = (type, m, conn) => {
         group: mess.msg.group,
         private: mess.msg.private,
         admin: mess.msg.admin,
-        botAdmin: mess.msg.botAdmin,
-        unreg: UnReg()
-    }[type]
+        banned: mess.msg.banned,
+        botAdmin: mess.msg.botAdmin
+        }[type]
     if (msg) return m.reply(msg)
+
+	let msgg = {
+        unreg: mess.msg.unreg
+        }[type]
+    let button = async (m, fetch) => {
+await conn.sendButtonLoc(m.chat, await(await fetch(global.ext.thum)).buffer(), `
+${msgg}
+`.trim(), mess.wm, 'daftar', `.daftar`)
+}
+  if (msgg) return button
 }
 
 let fs = require('fs')

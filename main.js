@@ -1,8 +1,11 @@
 require('./config')
 const {
-  useSingleFileAuthState,
+  useMultiFileAuthState,
+  makeInMemoryStore,
+  fetchLatestBaileysVersion,
   DisconnectReason
 } = require('@adiwajshing/baileys')
+const { Boom } = require('@hapi/boom')
 const WebSocket = require('ws')
 const path = require('path')
 const pino = require('pino')
@@ -19,6 +22,12 @@ const moment = require("moment-timezone")
 const time = moment.tz('Asia/Jakarta').format("HH:mm:ss")
 const { color } = require('./system/lib/color')
 let simple = require('./system/lib/simple')
+const express = require('express')
+let app = express()
+const {
+    createServer
+} = require('http')
+let server = createServer(app)
 var low
 try {
   low = require('lowdb')
@@ -27,6 +36,21 @@ try {
 }
 const { Low, JSONFile } = low
 const mongoDB = require('./system/lib/mongoDB')
+
+const store = makeInMemoryStore({
+        logger: pino().child({
+            level: 'silent',
+            stream: 'store'
+        })
+    })
+
+store?.readFromFile('./baileys_store_multi.json')
+// save every 10s
+setInterval(() => {
+	store?.writeToFile('./baileys_store_multi.json')
+}, 10_000)
+
+const startNayla = async () => {
 
 global.owner = Object.keys(global.Owner)
 global.API = (name, path = '/', query = {}, apikeyqueryname) => (name in global.APIs ? global.APIs[name] : name) + path + (query || apikeyqueryname ? '?' + new URLSearchParams(Object.entries({ ...query, ...(apikeyqueryname ? { [apikeyqueryname]: global.APIKeys[name in global.APIs ? global.APIs[name] : name] } : {}) })) : '')
@@ -68,9 +92,17 @@ global.loadDatabase = async function loadDatabase() {
 }
 loadDatabase()
 
+global.authFile = './session'
+global.isInit = !fs.existsSync(authFile)
+const { 
+        state, 
+        saveCreds 
+     } = await useMultiFileAuthState(global.authFile)
+const {
+        version,
+        isLatest
+    } = await fetchLatestBaileysVersion()
 
-global.authFile = `${opts._[0] || global.sessionName}.json`
-const { state, saveState } = useSingleFileAuthState(global.authFile)
 
 const logger = pino({
   transport: {
@@ -84,17 +116,41 @@ const logger = pino({
   }
 }).child({ class: 'baileys'})
 
-const connectionOptions = {
-  version: [2, 2208, 14],
-  printQRInTerminal: true,
-  auth: state,
-  // logger: pino({ prettyPrint: { levelFirst: true, ignore: 'hostname', translateTime: true },  prettifier: require('pino-pretty') }),
-  logger: pino({ level: 'silent' })
-  // logger: P({ level: 'trace' })
-}
+const connectionOptions = ({
+  version,
+        logger: pino({
+            level: 'silent'
+        }),
+        printQRInTerminal: true,
+        patchMessageBeforeSending: (message) => {
+            const requiresPatch = !!(
+                message.buttonsMessage ||
+                message.templateMessage ||
+                message.listMessage
+            );
+            if (requiresPatch) {
+                message = {
+                    viewOnceMessage: {
+                        message: {
+                            messageContextInfo: {
+                                deviceListMetadataVersion: 2,
+                                deviceListMetadata: {},
+                            },
+                            ...message,
+                        },
+                    },
+                };
+            }
+            return message;
+        },
+        browser: ['Nayla Multi Device', 'Safari', '1.0.0'],
+        auth: state
+    })
 
 global.conn = simple.makeWASocket(connectionOptions)
 conn.isInit = false
+
+store.bind(conn.ev)
 
 if (!opts['test']) {
   setInterval(async () => {
@@ -117,32 +173,6 @@ function clearTmp() {
       null))
 }
 
-async function connectionUpdate(update) {
-  const { connection, lastDisconnect } = update
-  global.timestamp.connect = new Date
-  if (lastDisconnect && lastDisconnect.error && lastDisconnect.error.output && lastDisconnect.error.output.statusCode !== DisconnectReason.loggedOut && conn.ws.readyState !== WebSocket.CONNECTING) {
-    console.log(global.reloadHandler(true))
-  }
-  if (global.db.data == null) await loadDatabase()
-  console.log(JSON.stringify(update, null, 4))
-  if (update.receivedPendingNotifications) conn.sendMessage(`6289520306297@s.whatsapp.net`, {text: '♨︎O̳K̳ B̳O̳T̳ B̳E̳R̳H̳A̳S̳I̳L̳ T̳E̳R̳H̳U̳B̳U̳N̳G̳' })
-}
-
-
-process.on('uncaughtException', console.error)
-// let strQuot = /(["'])(?:(?=(\\?))\2.)*?\1/
-
-// const imports = (path) => {
-//   path = require.resolve(path)
-//   let modules, retry = 0
-//   do {
-//     if (path in require.cache) delete require.cache[path]
-//     modules = require(path)
-//     retry++
-//   } while ((!modules || (Array.isArray(modules) || modules instanceof String) ? !(modules || []).length : typeof modules == 'object' && !Buffer.isBuffer(modules) ? !(Object.keys(modules || {})).length : true) && retry <= 10)
-//   return modules
-// }
-
 let isInit = true, handler = require('./system/handler')
 global.reloadHandler = function (restatConn) {
   let Handler = require('./system/handler')
@@ -153,29 +183,79 @@ global.reloadHandler = function (restatConn) {
       ...global.conn, ...simple.makeWASocket(connectionOptions)
     }
   }
-  if (!isInit) {
-    conn.ev.off('messages.upsert', conn.handler)
-    conn.ev.off('group-participants.update', conn.onParticipantsUpdate)
-    conn.ev.off('message.delete', conn.onDelete)
-    conn.ev.off('connection.update', conn.connectionUpdate)
-    conn.ev.off('creds.update', conn.credsUpdate)
-  }
 
   conn.welcome = mess.announce.wel
   conn.bye = mess.announce.bye
   conn.spromote = mess.announce.promote
   conn.sdemote = mess.announce.demote
-  conn.handler = handler.handler.bind(conn)
-  conn.onParticipantsUpdate = handler.participantsUpdate.bind(conn)
-  conn.onDelete = handler.delete.bind(conn)
-  conn.connectionUpdate = connectionUpdate.bind(conn)
-  conn.credsUpdate = saveState.bind(conn)
-
+  conn.handler = handler.handler
+  conn.onParticipantsUpdate = handler.participantsUpdate
+  conn.onDelete = handler.delete
+  conn.onCall = handler.onCall
+  
   conn.ev.on('messages.upsert', conn.handler)
+  conn.ev.on('call', conn.onCall)
   conn.ev.on('group-participants.update', conn.onParticipantsUpdate)
   conn.ev.on('message.delete', conn.onDelete)
-  conn.ev.on('connection.update', conn.connectionUpdate)
-  conn.ev.on('creds.update', conn.credsUpdate)
+  
+  conn.ev.process(
+        async (events) => {
+            if (events['presence.update']) {
+                await conn.sendPresenceUpdate('available')
+            }
+            if (events['creds.update']) {
+                await saveCreds()
+            }
+        }
+    )
+  
+  conn.ev.on('connection.update', async (update) => {
+        const {
+            connection,
+            lastDisconnect,
+            qr
+        } = update
+        if (qr) {
+            app.use(async (req, res) => {
+                res.setHeader('content-type', 'image/png')
+                res.end(await toBuffer(qr))
+            })
+            app.use(express.static(path.join(__dirname, 'views')))
+            server.listen(PORT, () => {
+                console.log('App listened on port', PORT)
+            })
+        }
+        if (connection === 'close') {
+            let reason = new Boom(lastDisconnect?.error)?.output.statusCode
+            if (reason === DisconnectReason.badSession) {
+                conn.logger.error(`Bad Session File, Please Delete Session and Scan Again`);
+                conn.logout();
+            } else if (reason === DisconnectReason.connectionClosed) {
+                conn.logger.warn("Connection closed, reconnecting....");
+                startNayla();
+            } else if (reason === DisconnectReason.connectionLost) {
+                conn.logger.warn("Connection Lost from Server, reconnecting...");
+                startNayla();
+            } else if (reason === DisconnectReason.connectionReplaced) {
+                conn.logger.error("Connection Replaced, Another New Session Opened, Please Close Current Session First");
+                conn.logout();
+            } else if (reason === DisconnectReason.loggedOut) {
+                conn.logger.error(`Device Logged Out, Please Scan Again And Run.`);
+                conn.logout();
+            } else if (reason === DisconnectReason.restartRequired) {
+                conn.logger.warn("Restart Required, Restarting...");
+                startNayla();
+            } else if (reason === DisconnectReason.timedOut) {
+                conn.logger.error("Naylaection TimedOut, Reconnecting...");
+                startNayla();
+            } else conn.end(`Unknown DisconnectReason: ${reason}|${connection}`)
+        }
+        if (update.connection == "open" || update.receivedPendingNotifications == "true") {
+            console.log('Connect, welcome owner!')
+            console.log(`Connected to = ` + JSON.stringify(conn.user, null, 2))
+            conn.sendMessage(`6289520306297@c.us`, {text: '♨︎O̳K̳ B̳O̳T̳ B̳E̳R̳H̳A̳S̳I̳L̳ T̳E̳R̳H̳U̳B̳U̳N̳G̳' })
+        }
+    })
   isInit = false
   return true
 }
@@ -269,3 +349,5 @@ async function _quickTest() {
 _quickTest()
   .then(() => conn.logger.info('Quick Test Done'))
   .catch(console.error)
+}
+startNayla()

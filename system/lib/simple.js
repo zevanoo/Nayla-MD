@@ -1,6 +1,5 @@
 const {
     default: makeWASocket,
-    makeWALegacySocket,
     extractMessageContent,
     makeInMemoryStore,
     proto,
@@ -26,22 +25,8 @@ const store = makeInMemoryStore({ logger: pino().child({ level: 'silent', stream
 
 
 exports.makeWASocket = (connectionOptions, options = {}) => {
-    let conn = (global.opts['legacy'] ? makeWALegacySocket : makeWASocket)(connectionOptions)
-
-    // conn.ws.on('CB:stream:error', (stream) => {
-    //     const { code } = stream || {}
-    //     if (code == '401') conn.ev.emit('connection.update', {
-    //         connection: 'logged Out',
-    //         lastDisconnect: {
-    //             error: {
-    //                 output: {
-    //                     statusCode: DisconnectReason.loggedOut
-    //                 }
-    //             },
-    //             date: new Date()
-    //         }
-    //     })
-    // })
+    let conn = makeWASocket(connectionOptions)
+    
     conn.decodeJid = (jid) => {
         if (!jid) return jid
         if (/:\d+@/gi.test(jid)) {
@@ -51,105 +36,6 @@ exports.makeWASocket = (connectionOptions, options = {}) => {
     }
     if (conn.user && conn.user.id) conn.user.jid = conn.decodeJid(conn.user.id)
     if (!conn.chats) conn.chats = {}
-
-    function updateNameToDb(contacts) {
-        if (!contacts) return
-        for (const contact of contacts) {
-            const id = conn.decodeJid(contact.id)
-            if (!id) continue
-            let chats = conn.chats[id]
-            if (!chats) chats = conn.chats[id] = { id }
-            conn.chats[id] = {
-                ...chats,
-                ...({
-                    ...contact, id, ...(id.endsWith('@g.us') ?
-                        { subject: contact.subject || chats.subject || '' } :
-                        { name: contact.notify || chats.name || chats.notify || '' })
-                } || {})
-            }
-        }
-    }
-	
-	
-    conn.ev.on('contacts.upsert', updateNameToDb)
-    conn.ev.on('groups.update', updateNameToDb)
-    conn.ev.on('chats.set', async ({ chats }) => {
-        for (const { id, name, readOnly } of chats) {
-            id = conn.decodeJid(id)
-            if (!id) continue
-            const isGroup = id.endsWith('@g.us')
-            let chats = conn.chats[id]
-            if (!chats) chats = conn.chats[id] = { id }
-            chats.isChats = !readOnly
-            if (name) chats[isGroup ? 'subject' : 'name'] = name
-            if (isGroup) {
-                const metadata = await conn.groupMetadata(id).catch(_ => null)
-                if (!metadata) continue
-                chats.subject = name || metadata.subject
-                chats.metadata = metadata
-            }
-        }
-    })
-    conn.ev.on('group-participants.update', async function updateParticipantsToDb({ id, participants, action }) {
-        id = conn.decodeJid(id)
-        if (!(id in conn.chats)) conn.chats[id] = { id }
-        conn.chats[id].isChats = true
-        const groupMetadata = await conn.groupMetadata(id).catch(_ => null)
-        if (!groupMetadata) return
-        conn.chats[id] = {
-            ...conn.chats[id],
-            subject: groupMetadata.subject,
-            metadata: groupMetadata
-        }
-    })
-
-    conn.ev.on('groups.update', async function groupUpdatePushToDb(groupsUpdates) {
-        for (const update of groupsUpdates) {
-            const id = conn.decodeJid(update.id)
-            if (!id) continue
-            const isGroup = id.endsWith('@g.us')
-            if (!isGroup) continue
-            let chats = conn.chats[id]
-            if (!chats) chats = conn.chats[id] = { id }
-            chats.isChats = true
-            const metadata = await conn.groupMetadata(id).catch(_ => null)
-            if (!metadata) continue
-            chats.subject = metadata.subject
-            chats.metadata = metadata
-        }
-    })
-    conn.ev.on('chats.upsert', async function chatsUpsertPushToDb(chatsUpsert) {
-        console.log({ chatsUpsert })
-        const { id, name } = chatsUpsert
-        if (!id) return
-        let chats = conn.chats[id] = { ...conn.chats[id], ...chatsUpsert, isChats: true }
-        const isGroup = id.endsWith('@g.us')
-        if (isGroup) {
-            const metadata = await conn.groupMetadata(id).catch(_ => null)
-            if (metadata) {
-                chats.subject = name || metadata.subject
-                chats.metadata = metadata
-            }
-            const groups = await conn.groupFetchAllParticipating().catch(_ => ({})) || {}
-            for (const group in groups) conn.chats[group] = { id: group, subject: groups[group].subject, isChats: true, metadata: groups[group] }
-        }
-    })
-    conn.ev.on('presence.update', async function presenceUpdatePushToDb({ id, presences }) {
-        const sender = Object.keys(presences)[0] || id
-        const _sender = conn.decodeJid(sender)
-        const presence = presences[sender]['lastKnownPresence'] || 'composing'
-        let chats = conn.chats[_sender]
-        if (!chats) chats = conn.chats[_sender] = { id: sender }
-        chats.presences = presence
-        if (id.endsWith('@g.us')) {
-            let chats = conn.chats[id]
-            if (!chats) {
-                const metadata = await conn.groupMetadata(id).catch(_ => null)
-                if (metadata) chats = conn.chats[id] = { id, subject: metadata.subject, metadata }
-            }
-            chats.isChats = true
-        }
-    })
 
     conn.logger = {
         ...conn.logger,

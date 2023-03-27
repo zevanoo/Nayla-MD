@@ -1,5 +1,6 @@
 //=============『 Gosah diubah 』================== //
-let fs = require('fs')
+const chalk = require('chalk')
+const { unwatchFile, watchFile } = require('fs')
 //=============『 Utama 』================== //
 global.Owner = {
 // use the phone number with the country code, for example Indonesia "62" America "1" etc
@@ -100,10 +101,9 @@ global.APIKeys = { // Apikey Here
 
 //=============『 Jangan Di Ubah 』================== //
 global.botwm = global.wm
-let chalk = require("chalk")
 let file = require.resolve(__filename)
-fs.watchFile(file, () => {
-fs.unwatchFile(file)
+watchFile(file, () => {
+unwatchFile(file)
 console.log(chalk.cyanBright("Update config.js"))
 delete require.cache[file]
 require(file)

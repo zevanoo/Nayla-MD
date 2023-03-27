@@ -5,16 +5,7 @@ let handler = async(m, { conn, text }) => {
     if (!link) return conn.reply(m.chat, 'Uhm... urlnya mana?', m)
     if (!resolusi) return conn.reply(m.chat, 'Harap memasukkan resolusi hd/sd !', m)
 
-    await conn.reply(m.chat, mess.wait, 0, { thumbnail: await(await fetch(ext.thum)).buffer(), contextInfo: {
-                  externalAdReply: {
-                    mediaUrl: 'https://youtu.be/-tKVN2mAKRI',
-                    title: ext.title,
-                    body: ext.body,
-                    thumbnail: await(await fetch(ext.thum)).buffer()
-                   }
-                 }
-               }
-           )
+    m.reply(global.mess.wait)
     new Promise((resolve, reject) => {
         axios.get(`https://mnazria.herokuapp.com/api/fbdownloadervideo?url=` + encodeURIComponent(link))
             .then((res) => {
