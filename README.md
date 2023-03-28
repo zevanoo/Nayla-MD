@@ -3,21 +3,21 @@
 <a href="#"><img title="NayLa-B0TZ" src="https://img.shields.io/badge/NayLa-B0TZ-green?colorA=%23ff0000&colorB=%23017e40&style=for-the-badge"></a>
 </p>
 <p align="center">
-<a href="https://github.com/zevoffc/nayla"><img title="Creator" src="https://img.shields.io/badge/Recode-Zevano-red.svg?style=for-the-badge&logo=github"></a>
+<a href="https://github.com/zevanoo/nayla"><img title="Creator" src="https://img.shields.io/badge/Recode-Zevano-red.svg?style=for-the-badge&logo=github"></a>
 </p>
 <p align="center">
-<a href="https://github.com/zevoffc/followers"><img title="Followers" src="https://img.shields.io/github/followers/zevoffc ?color=red&style=flat-square"></a>
-<a href="https://github.com/zevoffc/nayla/stargazers/"><img title="Stars" src="https://img.shields.io/github/stars/zevoffc/nayla?color=blue&style=flat-square"></a>
-<a href="https://github.com/zevoffc/nayla/network/members"><img title="Forks" src="https://img.shields.io/github/forks/zevoffc/nayla?color=red&style=flat-square"></a>
-<a href="https://github.com/zevoffc/nayla/watchers"><img title="Watching" src="https://img.shields.io/github/watchers/zevoffc/nayla?label=Watchers&color=blue&style=flat-square"></a>
-<a href="https://github.com/zevoffc/nayla"><img title="Open Source" src="https://badges.frapsoft.com/os/v2/open-source.svg?v=103"></a>
-<a href="https://github.com/zevoffc/nayla/"><img title="Size" src="https://img.shields.io/github/repo-size/zevoffc/nayla?style=flat-square&color=green"></a>
-<a href="https://hits.seeyoufarm.com"><img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fzevoffc%2Fnayla&count_bg=%2379C83D&title_bg=%23555555&icon=probot.svg&icon_color=%2300FF6D&title=hits&edge_flat=false"/></a>
-<a href="https://github.com/zevoffc/nayla/graphs/commit-activity"><img height="20" src="https://img.shields.io/badge/Maintained%3F-no-green.svg"></a>&nbsp;&nbsp;
+<a href="https://github.com/zevanoo/followers"><img title="Followers" src="https://img.shields.io/github/followers/zevanoo ?color=red&style=flat-square"></a>
+<a href="https://github.com/zevanoo/nayla/stargazers/"><img title="Stars" src="https://img.shields.io/github/stars/zevanoo/nayla?color=blue&style=flat-square"></a>
+<a href="https://github.com/zevanoo/nayla/network/members"><img title="Forks" src="https://img.shields.io/github/forks/zevanoo/nayla?color=red&style=flat-square"></a>
+<a href="https://github.com/zevanoo/nayla/watchers"><img title="Watching" src="https://img.shields.io/github/watchers/zevanoo/nayla?label=Watchers&color=blue&style=flat-square"></a>
+<a href="https://github.com/zevanoo/nayla"><img title="Open Source" src="https://badges.frapsoft.com/os/v2/open-source.svg?v=103"></a>
+<a href="https://github.com/zevanoo/nayla/"><img title="Size" src="https://img.shields.io/github/repo-size/zevanoo/nayla?style=flat-square&color=green"></a>
+<a href="https://hits.seeyoufarm.com"><img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fzevanoo%2Fnayla&count_bg=%2379C83D&title_bg=%23555555&icon=probot.svg&icon_color=%2300FF6D&title=hits&edge_flat=false"/></a>
+<a href="https://github.com/zevanoo/nayla/graphs/commit-activity"><img height="20" src="https://img.shields.io/badge/Maintained%3F-no-green.svg"></a>&nbsp;&nbsp;
 </p>
 
 <p align="center">
-  <a href="https://github.com/zevoffc/nayla#Donate">Donate</a>
+  <a href="https://github.com/zevanoo/nayla#Donate">Donate</a>
 </p>
 </div>
 
@@ -44,7 +44,7 @@
 ---------
 
 # Edit file
-* Change information on [this section](https://github.com/zevoffc/nayla/edit/main/config.js)
+* Change information on [this section](https://github.com/zevanoo/nayla/edit/main/config.js)
 
 ---------
 
@@ -53,9 +53,9 @@
 |--------|--------|
 | **TERMUX** |[✔️](https://github.com/termux/termux-app) |
 | **HEROKU** |[✔️](https://heroku.com) |
-| **RDP** |[✔️](https://github.com/zevoffc) |
-| **VPS** |[✔️](https://github.com/zevoffc) |
-| **WINDOWS** |[✔️](https://github.com/zevoffc) |
+| **RDP** |[✔️](https://github.com/zevanoo) |
+| **VPS** |[✔️](https://github.com/zevanoo) |
+| **WINDOWS** |[✔️](https://github.com/zevanoo) |
 
 ---------
 
@@ -70,7 +70,7 @@ $ apt install nodejs
 $ apt install ffmpeg
 $ apt install imagemagick
 $ apt install yarn
-$ git clone https://github.com/zevoffc/nayla
+$ git clone https://github.com/zevanoo/nayla
 $ cd nayla
 $ yarn
 ```
@@ -88,7 +88,7 @@ node .
 ## For Heroku User
 
 ### Deploy to Heroku
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/zevoffc/nayla)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/zevanoo/nayla)
 
 ### Heroku Buildpack
 | BuildPack | LINK |
@@ -105,8 +105,8 @@ node .
 * Download And Install ImageMagick [`Click Here`](https://imagemagick.org/script/download.php)
 
 ```bash
-npm i --global yarn
-git clone https://github.com/zevoffc/nayla
+npm i -g yarn
+git clone https://github.com/zevanoo/nayla
 cd nayla
 yarn
 ```
@@ -135,15 +135,9 @@ node .
 ## `--swonly`
 * If that chat not from status, bot will ignore
 
-## `--server`
-* Used for [heroku](https://heroku.com/) or scan through website
-
 ## `--restrict`
 * Enables restricted plugins (which can lead your number to be **banned** if used too often)
 * Group Administration `add, kick`
-
-## `--autocleartmp`
-If enabled, **tmp* folder contain files will be auto delete
 
 ## `--autoread`
 * If enabled, all incoming messages will be marked as read
@@ -151,8 +145,25 @@ If enabled, **tmp* folder contain files will be auto delete
 ## `--nyimak`
 * No bot, just print received messages and add users to database
 
-## `--test`
-* **Development** Testing Mode
+## `--clearsession`
+* Clear folder session except creds.json
+
+---------
+
+# FAQ
+
+### Bad Session
+1. apa yang harus dilakukan ketika
+
+```bash
+rm -rf session
+```
+3. setelah itu bisa scan qr kembali
+
+### ERR_SERVER_ALREADY_LISTENED
+1. apa yang harus dilakukan ketika
+<a href="https://github.com/zevanoo"><img src="https://telegra.ph/file/c655da7517ab18eeaf8a1.jpg" title="error"></a>
+2. maka restart consolemu itu dan start lagi script nya
 
 ---------
 
@@ -171,4 +182,4 @@ If enabled, **tmp* folder contain files will be auto delete
 
 ### Special Thanks to
 
-[![Zevano](https://github.com/zevoffc.png?size=100)](https://github.com/zevoffc)
+[![Zevano](https://github.com/zevanoo.png?size=100)](https://github.com/zevanoo)
