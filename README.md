@@ -8,7 +8,7 @@
 <p align="center">
 <a href="https://github.com/zevanoo/followers"><img title="Followers" src="https://img.shields.io/github/followers/zevanoo ?color=red&style=flat-square"></a>
 <a href="https://github.com/zevanoo/Nayla-MD/stargazers/"><img title="Stars" src="https://img.shields.io/github/stars/zevanoo/Nayla-MD?color=blue&style=flat-square"></a>
-<a href="https://github.com/zevanoo/Nayla-MD/network/members"><img title="Forks" src="https://img.shields.io/github/forks/zevanoo/Nayla-MD-MD?color=red&style=flat-square"></a>
+<a href="https://github.com/zevanoo/Nayla-MD/network/members"><img title="Forks" src="https://img.shields.io/github/forks/zevanoo/Nayla-MD?color=red&style=flat-square"></a>
 <a href="https://github.com/zevanoo/Nayla-MD/watchers"><img title="Watching" src="https://img.shields.io/github/watchers/zevanoo/Nayla-MD?label=Watchers&color=blue&style=flat-square"></a>
 <a href="https://github.com/zevanoo/Nayla-MD"><img title="Open Source" src="https://badges.frapsoft.com/os/v2/open-source.svg?v=103"></a>
 <a href="https://github.com/zevanoo/Nayla-MD/"><img title="Size" src="https://img.shields.io/github/repo-size/zevanoo/Nayla-MD?style=flat-square&color=green"></a>
