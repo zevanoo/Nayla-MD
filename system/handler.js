@@ -1,4 +1,4 @@
-const simple = require('./lib/simple')
+const { smsg } = require('./lib/myfunc')
 const util = require('util')
 const { color } = require('./lib/color')
 const fetch = require('node-fetch')
@@ -13,13 +13,12 @@ module.exports = {
         this.msgqueque = this.msgqueque || []
         // console.log(chatUpdate)
         if (!chatUpdate) return
-        this.pushMessage(chatUpdate.messages).catch(console.error)
         // if (!(chatUpdate.type === 'notify' || chatUpdate.type === 'append')) return
         let m = chatUpdate.messages[chatUpdate.messages.length - 1]
         if (!m) return
         // console.log(m)
         try {
-            m = simple.smsg(this, m) || m
+            m = smsg(this, m) || m
             if (!m) return
             // console.log(m)
             m.exp = 0

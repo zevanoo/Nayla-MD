@@ -22,44 +22,37 @@ const moment = require("moment-timezone")
 const time = moment.tz('Asia/Jakarta').format("HH:mm:ss")
 const { color } = require('./system/lib/color')
 let simple = require('./system/lib/simple')
+var low
+try {
+  low = require('lowdb')
+} catch {
+  low = require('./system/lib/lowdb')
+}
+const { Low, JSONFile } = low
+const mongoDB = require('./system/lib/mongoDB')
 const express = require('express')
 let app = express()
 const {
     createServer
 } = require('http')
 let server = createServer(app)
-var low
-try {
-  low = require('lowdb')
-} catch (e) {
-  low = require('./system/lib/lowdb')
-}
-const { Low, JSONFile } = low
-const mongoDB = require('./system/lib/mongoDB')
+let _qr = 'invalid'
+let PORT = 3000 || 8000 || 8080
 
-const store = makeInMemoryStore({
+const startNayla = async () => {
+	
+	const store = makeInMemoryStore({
         logger: pino().child({
             level: 'silent',
             stream: 'store'
         })
     })
-
-store?.readFromFile('./baileys_store_multi.json')
-// save every 10s
-setInterval(() => {
-	store?.writeToFile('./baileys_store_multi.json')
-}, 10_000)
-
-const startNayla = async () => {
-
 global.owner = Object.keys(global.Owner)
 global.API = (name, path = '/', query = {}, apikeyqueryname) => (name in global.APIs ? global.APIs[name] : name) + path + (query || apikeyqueryname ? '?' + new URLSearchParams(Object.entries({ ...query, ...(apikeyqueryname ? { [apikeyqueryname]: global.APIKeys[name in global.APIs ? global.APIs[name] : name] } : {}) })) : '')
 // global.Fn = function functionCallBack(fn, ...args) { return fn.call(global.conn, ...args) }
 global.timestamp = {
   start: new Date
 }
-
-const PORT = process.env.PORT || 3000
 
 global.opts = new Object(yargs(process.argv.slice(2)).exitProcess(false).parse())
 global.prefix = new RegExp('^[' + (opts['prefix'] || 'â€ŽxzXZ/i!#$%+Â£Â¢â‚¬Â¥^Â°=Â¶âˆ†Ã—Ã·Ï€âˆšâœ“Â©Â®:;?&.\\-').replace(/[|\\{}()[\]^$+*?.\-\^]/g, '\\$&') + ']')
@@ -144,7 +137,8 @@ const connectionOptions = ({
             return message;
         },
         browser: ['Nayla Multi Device', 'Safari', '1.0.0'],
-        auth: state
+        auth: state,
+        qrTimeout: 15000
     })
 
 global.conn = simple.makeWASocket(connectionOptions)
@@ -155,23 +149,11 @@ store.bind(conn.ev)
 if (!opts['test']) {
   setInterval(async () => {
     if (global.db.data) await global.db.write()
-    if (opts['autocleartmp']) try {
-      clearTmp()
-    } catch (e) { console.error(e) }
   }, 60 * 1000)
 }
-if (opts['server']) require('./system/server')(global.conn, PORT)
+let { connect } = require('./system/server')
+if (opts['server']) connect(PORT)
 if (opts['big-qr'] || opts['server']) conn.on('qr', qr => generate(qr, { small: false }))
-function clearTmp() {
-  const tmp = [os.tmpdir(), path.join(__dirname, './system/tmp')]
-  const filename = []
-  tmp.forEach(dirname => fs.readdirSync(dirname).forEach(file => filename.push(path.join(dirname, file))))
-  filename.map(file => (
-    stats = fs.statSync(file),
-    stats.isFile() && (Date.now() - stats.mtimeMs >= 1000 * 60 * 3) ?
-      fs.unlinkSync(file) :
-      null))
-}
 
 let isInit = true, handler = require('./system/handler')
 global.reloadHandler = function (restatConn) {
@@ -253,7 +235,6 @@ global.reloadHandler = function (restatConn) {
         if (update.connection == "open" || update.receivedPendingNotifications == "true") {
             console.log('Connect, welcome owner!')
             console.log(`Connected to = ` + JSON.stringify(conn.user, null, 2))
-            conn.sendMessage(`6289520306297@c.us`, {text: '♨︎O̳K̳ B̳O̳T̳ B̳E̳R̳H̳A̳S̳I̳L̳ T̳E̳R̳H̳U̳B̳U̳N̳G̳' })
         }
     })
   isInit = false
