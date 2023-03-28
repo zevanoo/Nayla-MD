@@ -3,21 +3,21 @@
 <a href="#"><img title="NayLa-B0TZ" src="https://img.shields.io/badge/NayLa-B0TZ-green?colorA=%23ff0000&colorB=%23017e40&style=for-the-badge"></a>
 </p>
 <p align="center">
-<a href="https://github.com/zevanoo/nayla"><img title="Creator" src="https://img.shields.io/badge/Recode-Zevano-red.svg?style=for-the-badge&logo=github"></a>
+<a href="https://github.com/zevanoo/Nayla-MD"><img title="Creator" src="https://img.shields.io/badge/Recode-Zevano-red.svg?style=for-the-badge&logo=github"></a>
 </p>
 <p align="center">
 <a href="https://github.com/zevanoo/followers"><img title="Followers" src="https://img.shields.io/github/followers/zevanoo ?color=red&style=flat-square"></a>
-<a href="https://github.com/zevanoo/nayla/stargazers/"><img title="Stars" src="https://img.shields.io/github/stars/zevanoo/nayla?color=blue&style=flat-square"></a>
-<a href="https://github.com/zevanoo/nayla/network/members"><img title="Forks" src="https://img.shields.io/github/forks/zevanoo/nayla?color=red&style=flat-square"></a>
-<a href="https://github.com/zevanoo/nayla/watchers"><img title="Watching" src="https://img.shields.io/github/watchers/zevanoo/nayla?label=Watchers&color=blue&style=flat-square"></a>
-<a href="https://github.com/zevanoo/nayla"><img title="Open Source" src="https://badges.frapsoft.com/os/v2/open-source.svg?v=103"></a>
-<a href="https://github.com/zevanoo/nayla/"><img title="Size" src="https://img.shields.io/github/repo-size/zevanoo/nayla?style=flat-square&color=green"></a>
-<a href="https://hits.seeyoufarm.com"><img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fzevanoo%2Fnayla&count_bg=%2379C83D&title_bg=%23555555&icon=probot.svg&icon_color=%2300FF6D&title=hits&edge_flat=false"/></a>
-<a href="https://github.com/zevanoo/nayla/graphs/commit-activity"><img height="20" src="https://img.shields.io/badge/Maintained%3F-no-green.svg"></a>&nbsp;&nbsp;
+<a href="https://github.com/zevanoo/Nayla-MD/stargazers/"><img title="Stars" src="https://img.shields.io/github/stars/zevanoo/Nayla-MD?color=blue&style=flat-square"></a>
+<a href="https://github.com/zevanoo/Nayla-MD/network/members"><img title="Forks" src="https://img.shields.io/github/forks/zevanoo/Nayla-MD-MD?color=red&style=flat-square"></a>
+<a href="https://github.com/zevanoo/Nayla-MD/watchers"><img title="Watching" src="https://img.shields.io/github/watchers/zevanoo/Nayla-MD?label=Watchers&color=blue&style=flat-square"></a>
+<a href="https://github.com/zevanoo/Nayla-MD"><img title="Open Source" src="https://badges.frapsoft.com/os/v2/open-source.svg?v=103"></a>
+<a href="https://github.com/zevanoo/Nayla-MD/"><img title="Size" src="https://img.shields.io/github/repo-size/zevanoo/Nayla-MD?style=flat-square&color=green"></a>
+<a href="https://hits.seeyoufarm.com"><img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fzevanoo%2FNayla-MD&count_bg=%2379C83D&title_bg=%23555555&icon=probot.svg&icon_color=%2300FF6D&title=hits&edge_flat=false"/></a>
+<a href="https://github.com/zevanoo/Nayla-MD/graphs/commit-activity"><img height="20" src="https://img.shields.io/badge/Maintained%3F-no-green.svg"></a>&nbsp;&nbsp;
 </p>
 
 <p align="center">
-  <a href="https://github.com/zevanoo/nayla#Donate">Donate</a>
+  <a href="https://github.com/zevanoo/Nayla-MD#Donate">Donate</a>
 </p>
 </div>
 
@@ -44,7 +44,7 @@
 ---------
 
 # Edit file
-* Change information on [this section](https://github.com/zevanoo/nayla/edit/main/config.js)
+* Change information on [this section](https://github.com/zevanoo/Nayla-MD/edit/main/config.js)
 
 ---------
 
@@ -70,8 +70,8 @@ $ apt install nodejs
 $ apt install ffmpeg
 $ apt install imagemagick
 $ apt install yarn
-$ git clone https://github.com/zevanoo/nayla
-$ cd nayla
+$ git clone https://github.com/zevanoo/Nayla-MD
+$ cd Nayla-MD
 $ yarn
 ```
 
@@ -88,7 +88,7 @@ node .
 ## For Heroku User
 
 ### Deploy to Heroku
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/zevanoo/nayla)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/zevanoo/Nayla-MD)
 
 ### Heroku Buildpack
 | BuildPack | LINK |
@@ -106,8 +106,8 @@ node .
 
 ```bash
 npm i -g yarn
-git clone https://github.com/zevanoo/nayla
-cd nayla
+git clone https://github.com/zevanoo/Nayla-MD
+cd Nayla-MD
 yarn
 ```
 
@@ -154,7 +154,8 @@ node .
 
 ### Bad Session
 1. apa yang harus dilakukan ketika
-
+<a href="https://github.com/zevanoo"><img src="https://telegra.ph/file/cca8fcbd223bacb684e85.jpg" title="error"></a>
+2. ketik cmd berikut
 ```bash
 rm -rf session
 ```
