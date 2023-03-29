@@ -151,9 +151,7 @@ if (!opts['test']) {
     if (global.db.data) await global.db.write()
   }, 60 * 1000)
 }
-let { connect } = require('./system/server')
-if (opts['server']) connect(PORT)
-if (opts['big-qr'] || opts['server']) conn.on('qr', qr => generate(qr, { small: false }))
+if (opts['big-qr']) conn.on('qr', qr => generate(qr, { small: false }))
 
 let isInit = true, handler = require('./system/handler')
 global.reloadHandler = function (restatConn) {

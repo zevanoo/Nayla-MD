@@ -44,7 +44,7 @@
 ---------
 
 # Edit file
-* Change information on [this section](https://github.com/zevanoo/Nayla-MD/edit/main/config.js)
+* Change information on [this section](https://github.com/zevanoo/Nayla-MD/edit/Baileys/config.js)
 
 ---------
 
