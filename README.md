@@ -1,9 +1,14 @@
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/colored.png)](#table-of-contents)
+<p align="center">
+    <img src="https://telegra.ph/file/5859353a380d9b67be198.jpg" width="100%" style="margin-left: auto;margin-right: auto;display: block;">
+</p>
+
 </p>
 <p align="center">
 <a href="#"><img title="NayLa-B0TZ" src="https://img.shields.io/badge/NayLa-B0TZ-green?colorA=%23ff0000&colorB=%23017e40&style=for-the-badge"></a>
 </p>
 <p align="center">
-<a href="https://github.com/zevanoo/Nayla-MD"><img title="Creator" src="https://img.shields.io/badge/Recode-Zevano-red.svg?style=for-the-badge&logo=github"></a>
+<a href="https://github.com/zevanoo/Nayla-MD"><img title="Creator" src="https://img.shields.io/badge/Author-Zevano-red.svg?style=for-the-badge&logo=github"></a>
 </p>
 <p align="center">
 <a href="https://github.com/zevanoo/followers"><img title="Followers" src="https://img.shields.io/github/followers/zevanoo ?color=red&style=flat-square"></a>
@@ -16,15 +21,9 @@
 <a href="https://github.com/zevanoo/Nayla-MD/graphs/commit-activity"><img height="20" src="https://img.shields.io/badge/Maintained%3F-no-green.svg"></a>&nbsp;&nbsp;
 </p>
 
-<p align="center">
-  <a href="https://github.com/zevanoo/Nayla-MD#Donate">Donate</a>
-</p>
-</div>
 
 
-
-
-# Information
+# `Information`
 
 > NayLa-B0TZ adalah bot yang saya buat dan kembangkan sendiri
 > Jika kamu menemukan semacam bug, harap untuk dimaklumi hehe
@@ -61,7 +60,7 @@
 
 # Installations
 
-## For Termux User
+## `For Termux User`
 1. Type mentioned below given commands one by one in Termux.
 ```sh
 $ pkg update && pkg upgrade
@@ -74,18 +73,12 @@ $ git clone https://github.com/zevanoo/Nayla-MD
 $ cd Nayla-MD
 $ yarn
 ```
-
-### Run
-
-```bash
-node .
-```
 2. Wait for bot starting...
-3. Scan QR code from 2nd device. (Go to whatsapp > Linked Devices > Join Multi Device Beta > Click on link device)
-4. Now your bot is ready to rock n roll.
+3. Scan QR code from 2nd device. (Go to whatsapp > Linked Devices > Click on link device)
+4. Now your bot is ready to use.
 
 
-## For Heroku User
+## `For Heroku User`
 
 ### Deploy to Heroku
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/zevanoo/Nayla-MD)
@@ -97,7 +90,7 @@ node .
 | **IMAGEMAGICK** | [here](https://github.com/DuckyTeam/heroku-buildpack-imagemagick) |
 
 
-## FOR WINDOWS/VPS/RDP USER
+## `FOR WINDOWS/VPS/RDP USER`
 
 * Download And Install Git [`Click Here`](https://git-scm.com/downloads)
 * Download And Install NodeJS [`Click Here`](https://nodejs.org/en/download)
@@ -152,6 +145,36 @@ node .
 
 # FAQ
 
+## `How To Customize Button Message`
+```js
+conn.sendButton(
+      jid, // send to where?
+      text, // send text?
+      footer, // send footer?
+      buffer, // buffer to send (optional), if you want to send button image, location
+      button, // send button?, example [['text1', 'id1'], ['text2', 'id2']]
+      quoted, // quoted message to send (optional)
+      options // options to send
+)
+
+// example
+conn.sendButton(m.chat, 'Zevano', mess.wm, null, [
+        ['text', 'id'], ['teXt', 'Id']
+])
+
+// example with image
+conn.sendButtonImg(m.chat, 'Zevano', mess.wm, await(await fetch(global.ext.thum)).buffer(), [
+        ['text', 'id'], ['teXt', 'Id']
+])
+
+// example with location
+conn.sendButtonLoc(m.chat, 'Zevano', mess.wm, await(await fetch(global.ext.thum)).buffer(), [
+        ['text', 'id'], ['teXt', 'Id']
+])
+```
+
+## Troubleshooting
+
 ### Bad Session
 1. apa yang harus dilakukan ketika
 <a href="https://github.com/zevanoo"><img src="https://telegra.ph/file/cca8fcbd223bacb684e85.jpg" title="error"></a>
@@ -184,3 +207,4 @@ rm -rf session
 ### Special Thanks to
 
 [![Zevano](https://github.com/zevanoo.png?size=100)](https://github.com/zevanoo)
+[![Yusuf](https://github.com/yusup909.png?size=100)](https://github.com/yusup909)

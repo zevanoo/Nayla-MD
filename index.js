@@ -4,9 +4,7 @@ const fs = require('fs')
 const CFonts = require('cfonts')
 const { clearF } = require('./system/lib/function')
 const chalk = require('chalk')
-const Readline = require('readline')
 const yargs = require('yargs/yargs')
-const rl = Readline.createInterface(process.stdin, process.stdout)
 
 CFonts.say('NayLa B0TZ', {
   font: 'simple',

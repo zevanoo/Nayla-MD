@@ -248,7 +248,7 @@ for (let filename of fs.readdirSync(pluginFolder).filter(pluginFilter)) {
   } catch {
   	let dir = path.join(pluginFolder, filename)
     let err = check(fs.readFileSync(dir), filename)
-    conn.logger.error(`error while loading '${filename}'`)
+    conn.logger.error(`error plugins file while loading '${filename}'`)
     console.error(err)
     delete global.plugins[filename]
   }

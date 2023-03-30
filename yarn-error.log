@@ -63,6 +63,7 @@ npm manifest:
       "fluent-ffmpeg": "^2.1.2",
       "form-data": "^3.0.1",
       "g-i-s": "^2.1.6",
+      "glob": "^9.3.2",
       "google-it": "^1.6.4",
       "human-readable": "^0.2.1",
       "hxz-api": "^1.0.1",

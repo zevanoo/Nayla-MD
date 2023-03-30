@@ -43,9 +43,47 @@ exports.makeWASocket = (connectionOptions, options = {}) => {
         error(...args) { console.error(chalk.bold.rgb(247, 38, 33)(`ERROR [${chalk.rgb(255, 255, 255)(new Date())}]:`), chalk.rgb(255, 38, 0)(...args)) },
         warn(...args) { console.log(chalk.bold.rgb(239, 225, 3)(`WARNING [${chalk.rgb(255, 255, 255)(new Date())}]:`), chalk.keyword('orange')(...args)) }
     }
+    
+    /**
+     * reSize Image
+     * @param {String} image 
+     * @param {Number} width 
+     * @param {Number} height 
+     * @returns 
+     */
+    conn.reSize = async (image, width, height) => {
+        let jimp = require('jimp')
+        var rjim = await jimp.read(image);
+        var reS = await rjim.resize(width, height).getBufferAsync(jimp.MIME_JPEG)
+        return reS
+    }
+    
+    /**
+     * getBuffer
+     * @param {String} url
+     * @param {Object} options
+     */
+    getBuffer = async (url, options) => {
+	try {
+		options ? options : {}
+		const res = await axios({
+			method: "get",
+			url,
+			headers: {
+				'DNT': 1,
+				'Upgrade-Insecure-Request': 1
+			},
+			...options,
+			responseType: 'arraybuffer'
+		})
+		return res.data
+	} catch (err) {
+		return err
+	}
+}
 
     /**
-     * getBuffer hehe
+     * getFile
      * @param {fs.PathLike} path
      * @param {Boolean} returnFilename
      */
@@ -69,7 +107,6 @@ exports.makeWASocket = (connectionOptions, options = {}) => {
         }
     }
 
-
     /**
      * waitEvent
      * @param {Partial<BaileysEventMap>|String} eventName 
@@ -91,10 +128,14 @@ exports.makeWASocket = (connectionOptions, options = {}) => {
         })
     }
     
-  conn.delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+    /**
+    * delay
+    * @param {Number} ms
+    */
+   conn.delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
      
   /**
-     * 
+     * filter
      * @param {String} text 
      * @returns 
      */
@@ -115,7 +156,7 @@ exports.makeWASocket = (connectionOptions, options = {}) => {
     }
     
     /**
-     * ms to date
+     * msToDate
      * @param {String} ms
      */
     conn.msToDate = (ms) => {
@@ -130,110 +171,84 @@ exports.makeWASocket = (connectionOptions, options = {}) => {
       // +minutes+":"+sec;
     }
     
-     /**
-    * isi
+    /**
+    * rand
+    * @param isi
     */
     conn.rand = async (isi) => {
         return isi[Math.floor(Math.random() * isi.length)]
     }
     
-         /* send Button
+         /* sendButton
      * @param {String} jid 
      * @param {String} contentText 
      * @param {String} footer
-     * @param {Buffer|String} buffer 
      * @param {String[]} buttons 
      * @param {Object} quoted 
      * @param {Object} options 
      */
-    conn.sendButton = async (jid, contentText, footer, buffer, buttons, quoted, options) => {
-        if (buffer) try { buffer = (await conn.getFile(buffer)).data } catch { buffer = null }
-        let message = {
-            ...options,
-            ...(buffer ? { caption: contentText || '' } : { text: contentText || '' }),
-            footer,
-            buttons: buttons.map(btn => {
-                return {
-                    buttonId: btn[1] || btn[0] || '',
-                    buttonText: {
-                        displayText: btn[0] || btn[1] || ''
-                    }
-                }
-            }),
-            ...(buffer ? { image: buffer } : {})
+     conn.sendButton = async (jid, contentText = '', footer = global.wm, but = [], quoted, options = {}) => {
+        const buttonMessage = {
+            text: contentText,
+            footer: footer,
+            buttons: but,
+            headerType: 1
         }
-        return await conn.sendMessage(jid, message, {
-            quoted,
-            upload: conn.waUploadToServer,
-            ...options
-        })
+        conn.sendMessage(jid, buttonMessage, { quoted, options })
     }
     
-       conn.sendBut = async(jid, content, footer, button1, row1, quoted) => {
-	  const buttons = [
-	  {buttonId: row1, buttonText: {displayText: button1}, type: 1}
-	  ]
-const buttonMessage = {
-    text: content,
-    footer: footer,
-    buttons: buttons,
-    headerType: 1,
-    mentions: conn.parseMention(footer+content)
-}
-return await conn.sendMessage(jid, buttonMessage, {quoted})
-  }
-  
-   conn.send2But = async(jid, content, footer, button1, row1, button2, row2, quoted) => {
-	  const buttons = [
-	   { buttonId: row1, buttonText: { displayText: button1 }, type: 1 },
-          { buttonId: row2, buttonText: { displayText: button2 }, type: 1 }
-	  ]
-const buttonMessage = {
-    text: content,
-    footer: footer,
-    buttons: buttons,
-    headerType: 1
-}
-return await conn.sendMessage(jid, buttonMessage, {quoted})
-  }
-  
-   conn.send3But = async(jid, content, footer,button1, row1, button2, row2, button3, row3, quoted) => {
-	  const buttons = [
-	  { buttonId: row1, buttonText: { displayText: button1 }, type: 1 },
-          { buttonId: row2, buttonText: { displayText: button2 }, type: 1 },
-          { buttonId: row3, buttonText: { displayText: button3 }, type: 1 }
-	  ]
-const buttonMessage = {
-    text: content,
-    footer: footer,
-    buttons: buttons,
-    headerType: 1
-}
-return await conn.sendMessage(jid, buttonMessage, {quoted})
-  }
-  conn.send4But = async(jid, content, footer,button1, row1, button2, row2, button3, row3, button4, row4, quoted) => {
-    const buttons = [
-    { buttonId: row1, buttonText: { displayText: button1 }, type: 1 },
-        { buttonId: row2, buttonText: { displayText: button2 }, type: 1 },
-        { buttonId: row3, buttonText: { displayText: button3 }, type: 1 },
-        { buttonId: row4, buttonText: { displayText: button4 }, type: 1 }
-    ]
-const buttonMessage = {
-  text: content,
-  footer: footer,
-  buttons: buttons,
-  headerType: 1
-}
-return await conn.sendMessage(jid, buttonMessage, {quoted})
-}
-/**
-     * send Button Img
+    /* send Button Image
      * @param {String} jid 
      * @param {String} contentText 
      * @param {String} footer
-     * @param {Buffer|String} buffer 
-     * @param {String[]} buttons
+     * @param {String[]} buttons 
+     * @param {Object} ments
      * @param {Object} quoted 
+     * @param {Object} options 
+     */
+     conn.sendButtonImg = async (jid, contentText, footer = global.wm, buffer, but = [], ments = [], quoted, options) => {
+        let img = await getBuffer(buffer)
+        const buttonMessage = {
+            image: img,
+            caption: contentText,
+            footer: footer,
+            buttons: but,
+            headerType: 'IMAGE',
+            mentions: ments
+        }
+        conn.sendMessage(jid, buttonMessage, { quoted, options })
+      }
+      
+      /* send Button Location
+     * @param {String} jid 
+     * @param {String} contentText 
+     * @param {String} footer
+     * @param {String[]} buttons 
+     * @param {Object} quoted 
+     * @param {Object} options 
+     */
+      conn.sendButtonLoc = async (jid, contentText, footer = global.wm, buffer, but = [], quoted, options) => {
+        let bb = await conn.reSize(buffer, 300, 150)
+        const buttonMessage = {
+            location: {
+                jpegThumbnail: bb
+            },
+            caption: contentText,
+            footer: footer,
+            buttons: but,
+            headerType: 'LOCATION'
+        }
+        conn.sendMessage(jid, buttonMessage, { quoted, options })
+    }
+      
+    /**
+     * sendFile
+     * @param {String} jid 
+     * @param {String} path
+     * @param {String} filename
+     * @param {Buffer|String} caption
+     * @param {String[]} quoted
+     * @param {Object} ptt
      * @param {Object} options 
      */
     conn.sendFile = async (jid, path, filename = '', caption = '', quoted, ptt = false, options = {}) => {
@@ -284,7 +299,14 @@ return await conn.sendMessage(jid, buttonMessage, {quoted})
             return m
         }
     }
-    //GANTI WM STIKER
+    
+    /**
+     * send Image as Sticker
+     * @param {String} jid
+     * @param {String} path
+     * @param {Object} quoted
+     * @param {Object} options
+     */
      conn.sendImageAsSticker = async (jid, path, quoted, options = {}) => {
         let buff = Buffer.isBuffer(path) ? path : /^data:.*?\/.*?;base64,/i.test(path) ? Buffer.from(path.split`,`[1], 'base64') : /^https?:\/\//.test(path) ? await (await fetch(path)).buffer() : fs.existsSync(path) ? fs.readFileSync(path) : Buffer.alloc(0)
         let buffer
@@ -297,6 +319,7 @@ return await conn.sendMessage(jid, buttonMessage, {quoted})
         await conn.sendMessage(jid, { sticker: { url: buffer }, ...options }, { quoted })
         return buffer
     }
+    
     /**
      * Send Contact
      * @param {String} jid 
@@ -338,7 +361,7 @@ END:VCARD
     }
     
     /**
-     * Reply to a message
+     * Reply
      * @param {String} jid
      * @param {String|Object} text
      * @param {Object} quoted
@@ -348,16 +371,8 @@ END:VCARD
         return Buffer.isBuffer(text) ? this.sendFile(jid, text, 'file', '', quoted, false, options) : conn.sendMessage(jid, { ...options, text, mentions: conn.parseMention(text) }, { quoted, ...options, mentions: conn.parseMention(text) })
     }
     
-    conn.decodeJid = (jid) => {
-        if (!jid) return jid
-        if (/:\d+@/gi.test(jid)) {
-            let decode = jidDecode(jid) || {}
-            return decode.user && decode.server && decode.user + '@' + decode.server || jid
-        } else return jid
-    }
-    
     /**
-     * 
+     * send Text
      * @param {*} jid 
      * @param {*} text 
      * @param {*} quoted 
@@ -391,54 +406,9 @@ END:VCARD
         await this.relayWAMessage(message)
         return message
     }
-
-    /**
-     * send Button
-     * @param {String} jid 
-     * @param {String} contentText 
-     * @param {String} footer
-     * @param {Buffer|String} buffer 
-     * @param {String[]} buttons 
-     * @param {proto.WebMessageInfo} quoted 
-     * @param {Object} options 
-     */
-    conn.sendButton = async (jid, text = '', footer = '', buffer, buttons, quoted, options = {}) => {
-        let type
-        if (buffer) try { (type = await conn.getFile(buffer), buffer = type.data) } catch { buffer = null }
-        let message = {
-            ...options,
-            [buffer ? 'caption' : 'text']: text || '',
-            footer,
-            buttons: buttons.map(btn => ({
-                buttonId: btn[1] || btn[0] || '',
-                buttonText: {
-                    displayText: btn[0] || btn[1] || ''
-                }
-            })),
-            ...(buffer ?
-                options.asLocation && /image/.test(type.mime) ? {
-                    location: {
-                        ...options,
-                        jpegThumbnail: buffer
-                    }
-                } : {
-                    [/video/.test(type.mime) ? 'video' : /image/.test(type.mime) ? 'image' : 'document']: buffer
-                } : {})
-        }
-        delete options.asLocation
-        delete options.asVideo
-        delete options.asDocument
-        delete options.asImage
-        return await conn.sendMessage(jid, message, {
-            quoted,
-            upload: conn.waUploadToServer,
-            ...options
-        })
-    }
     
-
     /**
-     * 
+     * send Hydrated
      * @param {String} jid 
      * @param {String} text 
      * @param {String} footer 
@@ -537,363 +507,6 @@ END:VCARD
     /**
      * Exact Copy Forward
      * @param {String} jid
-     * @param {proto.WebMessageInfo} message
-     * @param {Boolean|Number} forwardingScore
-     * @param {Object} options
-     */
-          /* send Button Img
-     * @param {String} jid 
-     * @param {String} contentText 
-     * @param {String} footer
-     * @param {Buffer|String} buffer 
-     * @param {String[]} buttons
-     * @param {Object} quoted 
-     * @param {Object} options 
-     */
-    conn.sendButtonImg = async (jid, buffer, contentText, footerText, button1, id1, quoted, options) => {
-        let type = await conn.getFile(buffer)
-        let { res, data: file } = type
-        if (res && res.status !== 200 || file.length <= 65536) {
-        try { throw { json: JSON.parse(file.toString()) } }
-        catch (e) { if (e.json) throw e.json }
-        }
-        const buttons = [
-        { buttonId: id1, buttonText: { displayText: button1 }, type: 1 }
-        ]
-
-        const buttonMessage = {
-            image: file,
-            fileLength: 800000000000000,
-            caption: contentText,
-            footer: footerText,
-            mentions: await conn.parseMention(contentText + footerText),
-            ...options,
-            buttons: buttons,
-            headerType: 4
-        }
-
-        return await conn.sendMessage(jid, buttonMessage, { quoted, ephemeralExpiration: 86400, contextInfo: { mentionedJid: conn.parseMention(contentText + footerText) }, ...options })
-    }
-    conn.send2ButtonImg = async (jid, buffer, contentText, footerText, button1, id1, button2, id2, quoted, options) => {
-        let type = await conn.getFile(buffer)
-        let { res, data: file } = type
-        if (res && res.status !== 200 || file.length <= 65536) {
-        try { throw { json: JSON.parse(file.toString()) } }
-        catch (e) { if (e.json) throw e.json }
-        }
-        const buttons = [
-        { buttonId: id1, buttonText: { displayText: button1 }, type: 1 },
-        { buttonId: id2, buttonText: { displayText: button2 }, type: 1 }
-        ]
-
-        const buttonMessage = {
-            image: file,
-            fileLength: 800000000000000,
-            caption: contentText,
-            footer: footerText,
-            mentions: await conn.parseMention(contentText + footerText),
-            ...options,
-            buttons: buttons,
-            headerType: 4
-        }
-
-        return await conn.sendMessage(jid, buttonMessage, { quoted, ephemeralExpiration: 86400, contextInfo: { mentionedJid: conn.parseMention(contentText + footerText) }, ...options })
-    }
-    conn.send3ButtonImg = async (jid, buffer, contentText, footerText, button1, id1, button2, id2, button3, id3, quoted, options) => {
-        let type = await conn.getFile(buffer)
-        let { res, data: file } = type
-        if (res && res.status !== 200 || file.length <= 65536) {
-        try { throw { json: JSON.parse(file.toString()) } }
-        catch (e) { if (e.json) throw e.json }
-        }
-        const buttons = [
-        { buttonId: id1, buttonText: { displayText: button1 }, type: 1 },
-        { buttonId: id2, buttonText: { displayText: button2 }, type: 1 },
-        { buttonId: id3, buttonText: { displayText: button3 }, type: 1 }
-        ]
-
-        const buttonMessage = {
-            image: file,
-            fileLength: 800000000000000,
-            caption: contentText,
-            footer: footerText,
-            mentions: await conn.parseMention(contentText + footerText),
-            ...options,
-            buttons: buttons,
-            headerType: 4
-        }
-
-        return await conn.sendMessage(jid, buttonMessage, { quoted, ephemeralExpiration: 86400, contextInfo: { mentionedJid: conn.parseMention(contentText + footerText) }, ...options })
-    }
-  
-    // const { generateWAMessageFromContent, proto } = require('@adiwajshing/baileys-md')
-    // const template = generateWAMessageFromContent(m.chat, proto.Message.fromObject({
-    //     templateMessage: {
-    //         hydratedTemplate: {
-    //             hydratedContentText: 'Testing',
-    //             hydratedButtons: [{
-    //                 urlButton: {
-    //                     displayText: 'test',
-    //                     url: 'whatsapp://send?text=HI'
-    //                 }
-    //             }, {
-    //                 callButton: {
-    //                     displayText: 'call ...',
-    //                     phoneNumber: '+62 8733'
-    //                 }
-    //             },
-    //             {
-    //                 quickReplyButton: {
-
-    //                     displayText: 'Hii',
-    //                     id: 'id1'
-    //                 }
-    //             }
-    //             ]
-    //         }
-    //     }
-    // }), { userJid: m.sender, quoted: m });
-    // return await conn.relayMessage(
-    //     m.chat,
-    //     template.message,
-    //     { messageId: template.key.id }
-    // )
-    // templateMessage: {
-    //     hydratedTemplate: {
-    //       hydratedContentText: text.trim(),
-    //       hydratedButtons: [{
-    //         urlButton: {
-    //           displayText: 'RestApi',
-    //           url: 'https://api.dhamzxploit.my.id'
-    //         }
-
-    //       },
-    //           {
-    //         callButton: {
-    //           displayText: 'Call Me',
-    //           phoneNumber: '+6285294959195'
-    //         }
-    //       },
-    //           {
-    //         quickReplyButton: {
-    //           displayText: 'BUTTON 1 ',
-    //           id: '.ping'
-    //         }
-
-    //       },
-    //           {
-    //         quickReplyButton: {
-    //           displayText: 'BUTTON 2',
-    //           id: '.ping'
-    //         }
-
-    //       },
-    //           {
-    //         quickReplyButton: {
-    //           displayText: 'BUTTON 3',
-    //           id: '.ping'
-    //         }
-
-    //       }]
-    //     }
-    //   }
-    // }), { userJid: m.sender, quoted: m });
-    // return await conn.relayMessage(
-    //   m.chat,
-    //   template.message,
-    //   { messageId: template.key.id }
-    // )
-    
-    /**
-    * cMod
-    * @param {String} jid 
-    * @param {*} message 
-    * @param {String} text 
-    * @param {String} sender 
-    * @param {*} options 
-    * @returns 
-    */
-    conn.sendH3Button = async (jid, content, displayText, link, displayCall, number, quickReplyText, id, quickReplyText2, id2, quickReplyText3, id3, quoted) => {
-		let template = generateWAMessageFromContent(jid, proto.Message.fromObject({
-			         templateMessage: {
-             hydratedTemplate: {
-                 hydratedContentText: content,
-                 hydratedButtons: [{
-                     urlButton: {
-                         displayText: displayText,
-                         url: link
-                     }
-                 }, {
-                     callButton: {
-                         displayText: displayCall,
-                         phoneNumber: number
-                     }
-                 },
-                 {
-             quickReplyButton: {
-               displayText: quickReplyText,
-               id: id,
-             }
-
-           },
-               {
-             quickReplyButton: {
-               displayText: quickReplyText2,
-               id: id2,
-             }
-           },
-           {
-             quickReplyButton: {
-              displayText: quickReplyText3,
-               id: id3,
-            }
-		   }]
-         }
-       }
-     }), { userJid: conn.user.jid, quoted: quoted});
-     return await conn.relayMessage(
-         jid,
-         template.message,
-         { messageId: template.key.id }
-     )
-	}
-	
-    conn.cMod = (jid, message, text = '', sender = conn.user.jid, options = {}) => {
-        let copy = message.toJSON()
-        let mtype = Object.keys(copy.message)[0]
-        let isEphemeral = false // mtype === 'ephemeralMessage'
-        if (isEphemeral) {
-            mtype = Object.keys(copy.message.ephemeralMessage.message)[0]
-        }
-        let msg = isEphemeral ? copy.message.ephemeralMessage.message : copy.message
-        let content = msg[mtype]
-        if (typeof content === 'string') msg[mtype] = text || content
-        else if (content.caption) content.caption = text || content.caption
-        else if (content.text) content.text = text || content.text
-        if (typeof content !== 'string') msg[mtype] = { ...content, ...options }
-        if (copy.participant) sender = copy.participant = sender || copy.participant
-        else if (copy.key.participant) sender = copy.key.participant = sender || copy.key.participant
-        if (copy.key.remoteJid.includes('@s.whatsapp.net')) sender = sender || copy.key.remoteJid
-        else if (copy.key.remoteJid.includes('@broadcast')) sender = sender || copy.key.remoteJid
-        copy.key.remoteJid = jid
-        copy.key.fromMe = areJidsSameUser(sender, conn.user.id) || false
-        return proto.WebMessageInfo.fromObject(copy)
-    }
-        conn.sendHButtonLoc = async (jid, buffer, content, footer, distek, link1, quick1, id1,quoted) => {
-		let template = generateWAMessageFromContent(jid, proto.Message.fromObject({
-			         templateMessage: {
-             hydratedTemplate: {
-                 hydratedContentText: content,
-                 mentions: conn.parseMention(content + footer),
-                 locationMessage: { 
-                 jpegThumbnail: buffer },
-                 hydratedFooterText: footer,
-    mentions: conn.parseMention(content + footer),
-                 hydratedButtons: [{
-                     urlButton: {
-                         displayText: distek,
-                         url: link1
-                     }
-                 },  {
-                     quickReplyButton: {
-                         displayText:quick1,
-                         id: id1
-                     }
-                 }],  mentions: conn.parseMention(content + footer)
-             }
-         }
-     }), { userJid: conn.user.jid, quoted: quoted,     mentions: conn.parseMention(content + footer)});
-     return await conn.relayMessage(
-         jid,
-         template.message,
-         { messageId: template.key.id }
-     )
-	}
-
-	conn.sendHButt = async (jid, content, distek, link, discall, number, retek, id,quoted) => {
-		let template = generateWAMessageFromContent(jid, proto.Message.fromObject({
-			         templateMessage: {
-             hydratedTemplate: {
-                 hydratedContentText: content,
-                 hydratedButtons: [{
-                     urlButton: {
-                         displayText: distek,
-                         url: link
-                     }
-                 }, {
-                     callButton: {
-                         displayText: discall,
-                         phoneNumber: number
-                     }
-                 },
-                 {
-                     quickReplyButton: {
-                         displayText:retek,
-                         id: id
-                     }
-                 }
-                 ]
-             }
-         }
-     }), { userJid: conn.user.jid, quoted: quoted});
-     return await conn.relayMessage(
-         jid,
-         template.message,
-         { messageId: template.key.id }
-     )
-	}
-	conn.sendButtonLoc= async (jid, buffer, content, footer, button1, row1, quoted, options = {}) => {
-		let buttons = [{buttonId: row1, buttonText: {displayText: button1}, type: 1}]
-		let buttonMessage = {
-	location: { jpegThumbnail: buffer },
-    caption: content,
-    footer: footer,
-    buttons: buttons,
-    headerType: 6
-}
-      return await  conn.sendMessage(jid, buttonMessage, {
-            quoted,
-            upload: conn.waUploadToServer,
-            ...options
-        })
-	}
-	conn.send2ButtonLoc= async (jid, buffer, content, footer, button1, row1, button2, row2, quoted, options = {}) => {
-		let buttons = [{buttonId: row1, buttonText: {displayText: button1}, type: 1},
-		{ buttonId: row2, buttonText: { displayText: button2 }, type: 1 }]
-		let buttonMessage = {
-	location: { jpegThumbnail: buffer },
-    caption: content,
-    footer: footer,
-    buttons: buttons,
-    headerType: 6
-}
-      return await  conn.sendMessage(jid, buttonMessage, {
-            quoted,
-            upload: conn.waUploadToServer,
-            ...options
-        })
-	}
-		conn.send3ButtonLoc= async (jid, buffer, content, footer, button1, row1, button2, row2, quoted, options = {}) => {
-		let buttons = [{buttonId: row1, buttonText: {displayText: button1}, type: 1},
-		{ buttonId: row2, buttonText: { displayText: button2 }, type: 1 },
-		 { buttonId: row3, buttonText: { displayText: button3 }, type: 1 }
-        ]
-		let buttonMessage = {
-	location: { jpegThumbnail: buffer },
-    caption: content,
-    footer: footer,
-    buttons: buttons,
-    headerType: 6
-}
-      return await  conn.sendMessage(jid, buttonMessage, {
-            quoted,
-            upload: conn.waUploadToServer,
-            ...options
-        })
-	}
-    /**
-     * Exact Copy Forward
-     * @param {String} jid
      * @param {Object} message
      * @param {Boolean|Number} forwardingScore
      * @param {Object} options
@@ -907,7 +520,11 @@ END:VCARD
         return m
     }
     
-    conn.loadMessage = conn.loadMessage || (async (messageID) => {
+    /**
+     * load Message
+     * @param {String} messageID
+     */
+    conn.loadMessage = (async (messageID) => {
         return Object.entries(conn.chats)
             .filter(([_, { messages }]) => typeof messages === 'object')
             .find(([_, { messages }]) => Object.entries(messages)
@@ -933,7 +550,12 @@ END:VCARD
         return saveToFile && fs.existsSync(filename) ? filename : buffer
     }
     
-    
+    /**
+     * Download and save Media Message
+     * @param {String} message
+     * @param {String} filename
+     * @param {Boolean} attachExtension
+     */
     conn.downloadAndSaveMediaMessage = async (message, filename, attachExtension = true) => {
         let quoted = message.msg ? message.msg : message
         let mime = (message.msg || message).mimetype || ''
@@ -952,7 +574,7 @@ END:VCARD
 
 
     /**
-     * parseMention(s)
+     * parseMention
      * @param {string} text 
      * @returns {string[]}
      */
@@ -977,6 +599,13 @@ END:VCARD
         return [...text.matchAll(/@([0-9]{5,16}|0)/g)].map(v => v[1] + '@s.whatsapp.net')
     }
     
+    /**
+     * send Text with Mentions
+     * @param {String} jid
+     * @param {String} text
+     * @param {Object} quoted
+     * @param {Object} options
+     */
      conn.sendTextWithMentions = async (jid, text, quoted, options = {}) => conn.sendMessage(jid, { text: text, contextInfo: { mentionedJid: [...text.matchAll(/@(\d{0,16})/g)].map(v => v[1] + '@s.whatsapp.net') }, ...options }, { quoted })
 
     /**
@@ -1049,21 +678,6 @@ END:VCARD
         for (const group in groups) conn.chats[group] = { ...(conn.chats[group] || {}), id: group, subject: groups[group].subject, isChats: true, metadata: groups[group] }
             return conn.chats
     }
-    
-    /*conn.processMessageStubType = async (m) => {
-        if (!m.messageStubType) return
-        const mtype = Object.keys(m.message || {})[0]
-        const chat = conn.decodeJid(m.key.remoteJid || m.message[mtype] && m.message[mtype].groupId || '')
-        const isGroup = chat.endsWith('@g.us')
-        if (!isGroup) return
-        let chats = conn.chats[chat]
-        if (!chats) chats = conn.chats[chat] = { id: chat }
-        chats.isChats = true
-        const metadata = await conn.groupMetadata(chat).catch(_ => null)
-        if (!metadata) return
-        chats.subject = metadata.subject
-        chats.metadata = metadata
-    }*/
 
     /**
      * pushMessage
@@ -1166,53 +780,6 @@ END:VCARD
         }
     }
      
-    /*conn.pushMessage = async (m) => {
-        if (!m) return
-        if (!Array.isArray(m)) m = [m]
-        for (const message of m) {
-            try {
-                // if (!(message instanceof proto.WebMessageInfo)) continue // https://github.com/adiwajshing/Baileys/pull/696/commits/6a2cb5a4139d8eb0a75c4c4ea7ed52adc0aec20f
-                if (!message) continue
-                if (message.messageStubType) conn.processMessageStubType(message).catch(console.error)
-                let mtype = Object.keys(message.message || {})
-                mtype = mtype[mtype[0] === 'messageContextInfo' && mtype.length == 2 ? 1 : 0]
-                const chat = conn.decodeJid(message.key.remoteJid || message.message[mtype] && message.message[mtype].groupId || '')
-                const isGroup = chat.endsWith('@g.us')
-                let chats = conn.chats[chat]
-                if (!chats) {
-                    if (isGroup) {
-                        const groups = await conn.groupFetchAllParticipating().catch(_ => ({}))
-                        for (const group in groups) conn.chats[group] = { id: group, subject: groups[group].subject, isChats: true, metadata: groups[group] }
-                    }
-                    chats = conn.chats[chat] = { id: chat, ...(conn.chats[chat] || {}) }
-                }
-                let metadata, sender
-                if (isGroup) {
-                    if (!chats.subject || !chats.metadata) {
-                        metadata = await conn.groupMetadata(chat).catch(_ => ({})) || {}
-                        if (!chats.subject) chats.subject = metadata.subject || ''
-                        if (!chats.metadata) chats.metadata = metadata
-                    }
-                    sender = conn.decodeJid(message.fromMe && conn.user.id || message.participant || message.key.participant || chat || '')
-                    if (sender !== chat) {
-                        let chats = conn.chats[sender]
-                        if (!chats) chats = conn.chats[sender] = { id: sender }
-                        if (!chats.name) chats.name = message.pushName || chats.name || ''
-                    }
-                } else {
-                    if (!chats.name) chats.name = message.pushName || chats.name || ''
-                }
-                if (['senderKeyDistributionMessage', 'protocolMessage'].includes(mtype)) continue
-                chats.isChats = true
-                const fromMe = message.key.fromMe || areJidsSameUser(chat, conn.user.id)
-                if (!chats.messages) chats.messages = {}
-                if (!fromMe) chats.messages[message.key.id] = JSON.parse(JSON.stringify(message, null, 2))
-            } catch (e) {
-                console.error(e)
-            }
-        }
-    }*/
-    
     /**
      * 
      * @param  {...any} args 
@@ -1222,37 +789,13 @@ END:VCARD
         return util.format(...args)
     }
     
-    /**
-     * 
-     * @param {String} url 
-     * @param {Object} options 
-     * @returns 
-     */
-    conn.getBuffer = async (url, options) => {
-        try {
-            options ? options : {}
-            const res = await axios({
-                method: "get",
-                url,
-                headers: {
-                    'DNT': 1,
-                    'Upgrade-Insecure-Request': 1
-                },
-                ...options,
-                responseType: 'arraybuffer'
-            })
-            return res.data
-        } catch (e) {
-            console.log(`Error : ${e}`)
-        }
-    }
 
     /**
      * Serialize Message, so it easier to manipulate
      * @param {Object} m
      */
     conn.serializeM = (m) => {
-        return exports.smsg(conn, m)
+        return exports.smsg(conn, m, store)
     }
 
     Object.defineProperty(conn, 'name', {
@@ -1261,250 +804,113 @@ END:VCARD
     })
     return conn
 }
+
 /**
  * Serialize Message
- * @param {ReturnType<typeof makeWASocket>} conn 
- * @param {proto.WebMessageInfo} m 
- * @param {Boolean} hasParent 
+ * @param {WAConnection} conn 
+ * @param {Object} m 
+ * @param {store} store 
  */
- exports.smsg = (conn, m, hasParent) => {
+exports.smsg = (conn, m, store) => {
     if (!m) return m
     let M = proto.WebMessageInfo
-    m = M.fromObject(m)
     if (m.key) {
         m.id = m.key.id
-        m.isBaileys = m.id && m.id.length === 16 || m.id.startsWith('3EB0') && m.id.length === 12 || false
-        m.chat = conn.decodeJid(m.key.remoteJid || message.message?.senderKeyDistributionMessage?.groupId || '')
+        m.isBaileys = m.id.startsWith('BAE5') && m.id.length === 16
+        m.chat = m.key.remoteJid
+        m.fromMe = m.key.fromMe
         m.isGroup = m.chat.endsWith('@g.us')
-        m.sender = conn.decodeJid(m.key.fromMe && conn.user.id || m.participant || m.key.participant || m.chat || '')
-        m.fromMe = m.key.fromMe || areJidsSameUser(m.sender, conn.user.id)
+        m.sender = m.fromMe ? (conn.user.id.split(":")[0]+'@s.whatsapp.net' || conn.user.id) : (m.key.participant || m.key.remoteJid)
     }
     if (m.message) {
-        let mtype = Object.keys(m.message)
-        m.mtype = (!['senderKeyDistributionMessage', 'messageContextInfo'].includes(mtype[0]) && mtype[0]) || // Sometimes message in the front
-            (mtype.length >= 3 && mtype[1] !== 'messageContextInfo' && mtype[1]) || // Sometimes message in midle if mtype length is greater than or equal to 3!
-            mtype[mtype.length - 1] // common case
+        m.mtype = Object.keys(m.message)[0]
+        m.body = m.message.conversation || m.message[m.mtype].caption || m.message[m.mtype].text || (m.mtype == 'listResponseMessage') && m.message[m.mtype].singleSelectReply.selectedRowId || (m.mtype == 'buttonsResponseMessage') && m.message[m.mtype].selectedButtonId || m.mtype
         m.msg = m.message[m.mtype]
-        if (m.chat == 'status@broadcast' && ['protocolMessage', 'senderKeyDistributionMessage'].includes(m.mtype)) m.chat = (m.key.remoteJid !== 'status@broadcast' && m.key.remoteJid) || m.sender
-        if (m.mtype == 'protocolMessage' && m.msg.key) {
-            if (m.msg.key.remoteJid == 'status@broadcast') m.msg.key.remoteJid = m.chat
-            if (!m.msg.key.participant || m.msg.key.participant == 'status_me') m.msg.key.participant = m.sender
-            m.msg.key.fromMe = conn.decodeJid(m.msg.key.participant) === conn.decodeJid(conn.user.id)
-            if (!m.msg.key.fromMe && m.msg.key.remoteJid === conn.decodeJid(conn.user.id)) m.msg.key.remoteJid = m.sender
+        if (m.mtype === 'ephemeralMessage') {
+            exports.smsg(hisoka, m.msg)
+            m.mtype = m.msg.mtype
+            m.msg = m.msg.msg
         }
-        m.text = m.msg.text || m.msg.caption || m.msg.contentText || m.msg || ''
-        if (typeof m.text !== 'string') {
-            if ([
-                'protocolMessage',
-                'messageContextInfo',
-                'stickerMessage',
-                'audioMessage',
-                'senderKeyDistributionMessage'
-            ].includes(m.mtype)) m.text = ''
-            else m.text = m.text.selectedDisplayText || m.text.hydratedTemplate?.hydratedContentText || m.text
-        }
-        m.mentionedJid = m.msg?.contextInfo?.mentionedJid?.length && m.msg.contextInfo.mentionedJid || []
-        let quoted = m.quoted = m.msg?.contextInfo?.quotedMessage ? m.msg.contextInfo.quotedMessage : null
+        let quoted = m.quoted = m.msg.contextInfo ? m.msg.contextInfo.quotedMessage : null
+        m.mentionedJid = m.msg.contextInfo ? m.msg.contextInfo.mentionedJid : []
         if (m.quoted) {
             let type = Object.keys(m.quoted)[0]
-            m.quoted = m.quoted[type]
-            if (typeof m.quoted === 'string') m.quoted = { text: m.quoted }
+			m.quoted = m.quoted[type]
+            if (['productMessage'].includes(type)) {
+				type = Object.keys(m.quoted)[0]
+				m.quoted = m.quoted[type]
+			}
+            if (typeof m.quoted === 'string') m.quoted = {
+				text: m.quoted
+			}
             m.quoted.mtype = type
             m.quoted.id = m.msg.contextInfo.stanzaId
-            m.quoted.chat = conn.decodeJid(m.msg.contextInfo.remoteJid || m.chat || m.sender)
-            m.quoted.isBaileys = m.quoted.id && m.quoted.id.length === 16 || false
-            m.quoted.sender = conn.decodeJid(m.msg.contextInfo.participant)
-            m.quoted.fromMe = m.quoted.sender === conn.user.jid
-            m.quoted.text = m.quoted.text || m.quoted.caption || m.quoted.contentText || ''
-            m.quoted.name = conn.getName(m.quoted.sender)
-            m.quoted.mentionedJid = m.quoted.contextInfo?.mentionedJid?.length && m.quoted.contextInfo.mentionedJid || []
-            let vM = m.quoted.fakeObj = M.fromObject({
-                key: {
-                    fromMe: m.quoted.fromMe,
-                    remoteJid: m.quoted.chat,
-                    id: m.quoted.id
-                },
-                message: quoted,
-                ...(m.isGroup ? { participant: m.quoted.sender } : {})
-            })
-            m.getQuotedObj = m.getQuotedMessage = async () => {
-                if (!m.quoted.id) return null
-                let q = M.fromObject(await conn.loadMessage(m.quoted.id) || vM)
-                return exports.smsg(conn, q)
-            }
-            if (m.quoted.url || m.quoted.directPath) m.quoted.download = (saveToFile = false) => conn.downloadM(m.quoted, m.quoted.mtype.replace(/message/i, ''), saveToFile)
-            
- 
-/*exports.smsg = (conn, m, hasParent) => {
-    if (!m) return m
-    let M = proto.WebMessageInfo
-    m = M.fromObject(m)
-    if (m.key) {
-        m.id = m.key.id
-        m.isBaileys = m.id && m.id.length === 16 || m.id.startsWith('3EB0') && m.id.length === 12 || false
-        let mtype = Object.keys(m.message || {})[0]
-        m.chat = conn.decodeJid(m.key.remoteJid || m.message[mtype] && m.message[mtype].groupId || '')
-        m.isGroup = m.chat.endsWith('@g.us')
-        m.sender = conn.decodeJid(m.fromMe && conn.user.id || m.participant || m.key.participant || m.chat || '')
-        m.fromMe = m.key.fromMe || areJidsSameUser(m.sender, conn.user.id)
-    }
-    if (m.message) {
-        let mtype = Object.keys(m.message)
-        m.mtype = mtype[mtype[0] === 'messageContextInfo' && mtype.length == 2 ? 1 : 0]
-        m.msg = m.message[m.mtype]
-        if (m.chat == 'status@broadcast' && ['protocolMessage', 'senderKeyDistributionMessage'].includes(m.mtype)) m.chat = m.sender
-        // if (m.mtype === 'ephemeralMessage') {
-        //     exports.smsg(conn, m.msg)
-        //     m.mtype = m.msg.mtype
-        //     m.msg = m.msg.msg
-        //   }
-        if (m.mtype == 'protocolMessage' && m.msg.key) {
-            if (m.msg.key.remoteJid == 'status@broadcast') m.msg.key.remoteJid = m.chat
-            if (!m.msg.key.participant || m.msg.key.participant == 'status_me') m.msg.key.participant = m.sender
-            m.msg.key.fromMe = conn.decodeJid(m.msg.key.participant) === conn.decodeJid(conn.user.id)
-            if (!m.msg.key.fromMe && m.msg.key.remoteJid === conn.decodeJid(conn.user.id)) m.msg.key.remoteJid = m.sender
-        }
-        m.text = m.msg.text || m.msg.caption || m.msg.contentText || m.msg || ''
-        m.mentionedJid = m.msg && m.msg.contextInfo && m.msg.contextInfo.mentionedJid && m.msg.contextInfo.mentionedJid.length && m.msg.contextInfo.mentionedJid || []
-        let quoted = m.quoted = m.msg && m.msg.contextInfo && m.msg.contextInfo.quotedMessage ? m.msg.contextInfo.quotedMessage : null
-        if (m.quoted) {
-            let type = Object.keys(m.quoted)[0]
-            m.quoted = m.quoted[type]
-            if (typeof m.quoted === 'string') m.quoted = { text: m.quoted }
-            m.quoted.mtype = type
-            m.quoted.id = m.msg.contextInfo.stanzaId
-            m.quoted.chat = conn.decodeJid(m.msg.contextInfo.remoteJid || m.chat || m.sender)
-            m.quoted.isBaileys = m.quoted.id && m.quoted.id.length === 16 || false
-            m.quoted.sender = conn.decodeJid(m.msg.contextInfo.participant)
-            m.quoted.fromMe = m.quoted.sender === conn.user.jid
+			m.quoted.chat = m.msg.contextInfo.remoteJid || m.chat
+            m.quoted.isBaileys = m.quoted.id ? m.quoted.id.startsWith('BAE5') && m.quoted.id.length === 16 : false
+			m.quoted.sender = m.msg.contextInfo.participant.split(":")[0] || m.msg.contextInfo.participant
+			m.quoted.fromMe = m.quoted.sender === (conn.user && conn.user.id)
             m.quoted.text = m.quoted.text || m.quoted.caption || ''
-            m.quoted.name = conn.getName(m.quoted.sender)
-            m.quoted.mentionedJid = m.quoted.contextInfo && m.quoted.contextInfo.mentionedJid && m.quoted.contextInfo.mentionedJid.length && m.quoted.contextInfo.mentionedJid || []
+			m.quoted.mentionedJid = m.msg.contextInfo ? m.msg.contextInfo.mentionedJid : []
+            m.getQuotedObj = m.getQuotedMessage = async () => {
+			if (!m.quoted.id) return false
+			let q = await store.loadMessage(m.chat, m.quoted.id, conn)
+ 			return exports.smsg(conn, q, store)
+            }
             let vM = m.quoted.fakeObj = M.fromObject({
                 key: {
-                    fromMe: m.quoted.fromMe,
                     remoteJid: m.quoted.chat,
+                    fromMe: m.quoted.fromMe,
                     id: m.quoted.id
                 },
                 message: quoted,
                 ...(m.isGroup ? { participant: m.quoted.sender } : {})
             })
-            m.getQuotedObj = m.getQuotedMessage = () => {
-                if (!m.quoted.id) return false
-                let q = M.fromObject(((conn.chats[m.quoted.chat] || {}).messages || {})[m.quoted.id])
-                return exports.smsg(conn, q ? q : vM)
-            }
-
-            if (m.quoted.url || m.quoted.directPath) m.quoted.download = (saveToFile = false) => conn.downloadM(m.quoted, m.quoted.mtype.replace(/message/i, ''), saveToFile)*/
 
             /**
-             * Reply to quoted message
-             * @param {String|Object} text
-             * @param {String|false} chatId
-             * @param {Object} options
-             */
-            m.quoted.reply = (text, chatId, options) => conn.reply(chatId ? chatId : m.chat, text, vM, options)
-
-            /**
-             * Copy quoted message
-             */
-            m.quoted.copy = () => exports.smsg(conn, M.fromObject(M.toObject(vM)))
-
-            /**
-             * Forward quoted message
-             * @param {String} jid
-             *  @param {Boolean} forceForward
-            */
-            m.quoted.forward = (jid, forceForward = false) => conn.forwardMessage(jid, vM, forceForward)
-
-            /**
-             * Exact Forward quoted message
-             * @param {String} jid
-             * @param {Boolean|Number} forceForward
-             * @param {Object} options
-            */
-            m.quoted.copyNForward = (jid, forceForward = true, options = {}) => conn.copyNForward(jid, vM, forceForward, options)
-
-            /**
-             * Modify quoted Message
-             * @param {String} jid
-             * @param {String} text
-             * @param {String} sender
-             * @param {Object} options
-            */
-            m.quoted.cMod = (jid, text = '', sender = m.quoted.sender, options = {}) => conn.cMod(jid, vM, text, sender, options)
-
-            /**
-             * Delete quoted message
+             * 
+             * @returns 
              */
             m.quoted.delete = () => conn.sendMessage(m.quoted.chat, { delete: vM.key })
+
+	   /**
+		* 
+		* @param {*} jid 
+		* @param {*} forceForward 
+		* @param {*} options 
+		* @returns 
+	   */
+            m.quoted.copyNForward = (jid, forceForward = false, options = {}) => conn.copyNForward(jid, vM, forceForward, options)
+
+            /**
+              *
+              * @returns
+            */
+            m.quoted.download = () => conn.downloadMediaMessage(m.quoted)
         }
     }
-    m.name = m.pushName || conn.getName(m.sender)
-    if (m.msg && m.msg.url) m.download = (saveToFile = false) => conn.downloadM(m.msg, m.mtype.replace(/message/i, ''), saveToFile)
+    if (m.msg.url) m.download = () => conn.downloadMediaMessage(m.msg)
+    m.text = (m.mtype == 'listResponseMessage' ? m.msg.singleSelectReply.selectedRowId : '') || m.msg.text || m.msg.caption || m.msg || ''
     /**
-     * Reply to this message
-     * @param {String|Object} text
-     * @param {String|false} chatId
-     * @param {Object} options
-     */
-    m.reply = (text, chatId, options) => conn.reply(chatId ? chatId : m.chat, text, m, options)
+	* Reply to this message
+	* @param {String|Object} text 
+	* @param {String|false} chatId 
+	* @param {Object} options 
+	*/
+    m.reply = (text, chatId, options) => conn.sendMessage(chatId ? chatId : m.chat, { text: text }, { quoted: m, detectLinks: false, thumbnail: global.thumb, ...options })
+    /**
+	* Copy this message
+	*/
+	m.copy = () => exports.smsg(conn, M.fromObject(M.toObject(m)))
 
-    /**
-     * Copy this message
-     */
-    m.copy = () => exports.smsg(conn, M.fromObject(M.toObject(m)))
+	/**
+	 * 
+	 * @param {*} jid 
+	 * @param {*} forceForward 
+	 * @param {*} options 
+	 * @returns 
+	 */
+	m.copyNForward = (jid = m.chat, forceForward = false, options = {}) => conn.copyNForward(jid, m, forceForward, options)
 
-    /**
-     * Forward this message
-     * @param {String} jid
-     * @param {Boolean} forceForward
-     */
-    m.forward = (jid = m.chat, forceForward = false) => conn.copyNForward(jid, m, forceForward, options)
-    
-    // BY JOHANNES
-    /**
-     * Reply to this message
-     * @param {String|Object} text
-     * @param {String|false} chatId
-     * @param {Object} options
-     */
-     m.reply = async (text, chatId, options) => {
-    	let pp = await conn.profilePictureUrl(m.sender, 'image').catch(_ => 'https://telegra.ph/file/a2ae6cbfa40f6eeea0cf1.jpg')
-        let { data } = await conn.getFile(await(await require('node-fetch')(pp)).buffer())
-        conn.reply(chatId ? chatId : m.chat, text, m, { contextInfo: { mentionedJid: conn.parseMention(text), externalAdReply: { title: '𝙲𝚊𝚛𝚊 𝙱𝚒𝚔𝚒𝚗 𝙱𝚘𝚝', body: wm, sourceUrl: 'https://youtube.com/channel/UC0rPHvwr0sJtaccF8Mm1Xng', thumbnail: data }}, options })
-    }
-    m.name = m.pushName || conn.getName(m.sender)
-    if (m.msg && m.msg.url) m.download = () => conn.downloadM(m.msg, m.mtype.toLowerCase().replace(/message/i, ''))
-    
-    /**
-     * Exact Forward this message
-     * @param {String} jid
-     * @param {Boolean} forceForward
-     * @param {Object} options
-     */
-    
-    m.copyNForward = (jid = m.chat, forceForward = true, options = {}) => conn.copyNForward(jid, m, forceForward, options)
-
-    /**
-     * Modify this Message
-     * @param {String} jid 
-     * @param {String} text 
-     * @param {String} sender 
-     * @param {Object} options 
-     */
-    m.cMod = (jid, text = '', sender = m.sender, options = {}) => conn.cMod(jid, m, text, sender, options)
-
-    /**
-     * Delete this message
-     */
-    m.delete = () => conn.sendMessage(m.chat, { delete: m.key })
-
-    try {
-        if (m.msg && m.mtype == 'protocolMessage') conn.ev.emit('message.delete', m.msg.key)
-    } catch (e) {
-        console.error(e)
-    }
     return m
 }
 

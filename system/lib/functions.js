@@ -3,6 +3,8 @@ const axios = require('axios')
 const cfonts = require('cfonts')
 const spin = require('spinnies')
 const Crypto = require('crypto')
+const fs = require('fs')
+const chalk = require('chalk')
 
 const wait = async (media) => new Promise(async (resolve, reject) => {
     const attachmentData = `data:image/jpeg;base64,${media.toString('base64')}`
@@ -144,6 +146,24 @@ const banner = cfonts.render(('LOADING...'), {
     gradient: ["red","yellow"],
     lineHeight: 3
   });
+  
+const clearF = (folderPath) => {
+        try {
+            fs.readdir(folderPath, (err, files) => {
+                if (err) throw err
+
+                for (const file of files) {
+                    fs.unlink(`${folderPath}${file}`, (err) => {
+                        if (err) throw err
+                        console.log(chalk.rgb(12, 216, 235)(`Deleted ${file}`));
+                    })
+                }
+            })
+        
+    } catch (error) {
+        console.error(chalk.rgb(255, 38, 0)('Error clearing folder', error));
+    }
+   }
 
 
-module.exports = { wait, simih, getBuffer, h2k, generateMessageID, getGroupAdmins, getRandom, start, info, success, banner, close, pickRandom, }
+module.exports = { wait, simih, getBuffer, h2k, generateMessageID, getGroupAdmins, getRandom, start, info, success, banner, close, pickRandom, clearF }

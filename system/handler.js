@@ -1,4 +1,4 @@
-const { smsg } = require('./lib/myfunc')
+const { smsg } = require('./lib/simple')
 const util = require('util')
 const { color } = require('./lib/color')
 const fetch = require('node-fetch')
@@ -823,10 +823,10 @@ global.dfail = (type, m, conn) => {
 	let msgg = {
         unreg: mess.msg.unreg
         }[type]
-    let button = async () => {
-await conn.sendButtonLoc(m.chat, await(await fetch(global.ext.thum)).buffer(), `
+    let button = async (fetch) => {
+await conn.sendButtonLoc(m.chat, `
 ${msgg}
-`.trim(), mess.wm, 'daftar', `.daftar`)
+`, mess.wm, await(await fetch(global.ext.thum)).buffer(), [['Daftar', '.daftar']])
 }
   if (msgg) return button
 }
