@@ -1,8 +1,4 @@
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/colored.png)](#table-of-contents)
-<p align="center">
-    <img src="https://telegra.ph/file/5859353a380d9b67be198.jpg" width="100%" style="margin-left: auto;margin-right: auto;display: block;">
-</p>
-
 </p>
 <p align="center">
 <a href="#"><img title="NayLa-B0TZ" src="https://img.shields.io/badge/NayLa-B0TZ-green?colorA=%23ff0000&colorB=%23017e40&style=for-the-badge"></a>
@@ -158,7 +154,7 @@ conn.sendButton(
 )
 
 // example
-conn.sendButton(m.chat, 'Zevano', mess.wm, null, [
+conn.sendButton(m.chat, 'Zevano', mess.wm, [
         ['text', 'id'], ['teXt', 'Id']
 ])
 

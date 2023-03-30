@@ -27,7 +27,6 @@ saweria: "https://saweria.co/Scaff"
 //=============『 Info Bot 』================== //
 global.linkGC = ["https://chat.whatsapp.com/IS1V1LKUy16Fjd08uPtTdP"]
 global.botname = "NAYLA-BOTZ"
-global.sessionName = "nayla" // The Session name behind the .json example is nayla.json
 
 //=============『 Tampilan & Lainnya 』================== //
 global.ext = {
