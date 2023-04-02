@@ -4,41 +4,41 @@ const { unwatchFile, watchFile } = require('fs')
 //=============『 Utama 』================== //
 global.Owner = {
 // use the phone number with the country code, for example Indonesia "62" America "1" etc
-"6289520306297": { // 6289520306297
-name: "Zevano",
+"6281770821144" : { // 6289520306297
+nama : "𝑲𝒐𝑲𝒐•𝑯𝒊𝒍𝒎𝒊⸸𓃵⃟🌐" ,
 isReport: true, // if true this number will send if user use command /report or /join
 isCreator: true, // if true this number will send if user use command /owner or /creator
 isDev: true
 }
 }
 global.prems = []
-global.mods = ["6283897390164"] // Want some help?
+global.mods = ["6281770821144"] // Want some help?
 
 //=============『 Info Owner 』================== //
-global.instagram = "https://instagram.com/zevoffc"
+global.instagram = "https/Instagram.com/hilmi_crewsakan27"
 global.github = "https://github.com/zevoffc"
 global.donasi = {
-dana: "gada",
-pulsa: "+62 895 2030 6297",
-gopay: "gada",
-saweria: "https://saweria.co/Scaff"
+dana: "085748262776",
+pulsa: "6281770821144",
+gopay: "085748262776",
+saweria: "gak ada"
 }
 
 //=============『 Info Bot 』================== //
-global.linkGC = ["https://chat.whatsapp.com/IS1V1LKUy16Fjd08uPtTdP"]
-global.botname = "NAYLA-BOTZ"
+global.linkGC = ["https://chat.whatsapp.com/LOUQ7KWUfKw6wotlyIoB4w"]
+global.botname = "✞𝙷𝙸𝙻𝙼𝙸 𝙼𝙳✞-Botz"
 
 //=============『 Tampilan & Lainnya 』================== //
 global.ext = {
 title: "Sabar sedang di proses",
-body: "NayLa-B0TZ",
+body: "𝑲𝒐𝑲𝒐•𝑯𝒊𝒍𝒎𝒊⸸𓃵⃟🌐",
 thum: "https://telegra.ph/file/5859353a380d9b67be198.jpg"
 }
-global.wm = '© nayla'
+global.wm = '© 𝑲𝒐𝑲𝒐•𝑯𝒊𝒍𝒎𝒊⸸𓃵⃟🌐'
 global.mess = {
 wm: global.wm,
 sukses: "Done Ya kawand",
-wait: "*❏ WAIT TUNGGU*",
+wait: "*❏ WAIT TUNGGU YA ANJIING*",
 error: "*❏ ERROR CUK*",
     msg: {
 owner: "Maaf fitur ini hanya bisa digunakan oleh *Owner*",
@@ -57,8 +57,8 @@ promote: "「 PROMOTE - DETECTED 」\nTarget : @user\nStatus : Member -> Admin\n
 demote: "「 DEMOTE - DETECTED 」\nTarget : @user\nStatus : Admin -> Member\nYAHAHA KASIAN KENA DEMOTE"
 }
 }
-global.packname = "NayLa-B0TZ"
-global.author = "Zevano"
+global.packname = "✞𝙷𝙸𝙻𝙼𝙸 𝙼𝙳✞-Botz"
+global.author = "✞𝑲𝒐𝑲𝒐•𝑯𝒊𝒍𝒎𝒊✞"
 global.mesreport = 50
 global.expc = 15
 
