@@ -22,6 +22,7 @@ const moment = require("moment-timezone")
 const time = moment.tz('Asia/Jakarta').format("HH:mm:ss")
 const { color } = require('./system/lib/color')
 let simple = require('./system/lib/simple')
+const { toBuffer } = require('qrcode')
 var low
 try {
   low = require('lowdb')

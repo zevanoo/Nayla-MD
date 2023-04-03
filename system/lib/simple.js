@@ -206,15 +206,14 @@ exports.makeWASocket = (connectionOptions, options = {}) => {
      * @param {Object} quoted 
      * @param {Object} options 
      */
-     conn.sendButtonImg = async (jid, contentText, footer = global.wm, buffer, but = [], ments = [], quoted, options) => {
+     conn.sendButtonImg = async (jid, contentText, footer = global.wm, buffer, but = [], quoted, options) => {
         let img = await getBuffer(buffer)
         const buttonMessage = {
             image: img,
             caption: contentText,
             footer: footer,
             buttons: but,
-            headerType: 'IMAGE',
-            mentions: ments
+            headerType: 4
         }
         conn.sendMessage(jid, buttonMessage, { quoted, options })
       }
@@ -236,7 +235,27 @@ exports.makeWASocket = (connectionOptions, options = {}) => {
             caption: contentText,
             footer: footer,
             buttons: but,
-            headerType: 'LOCATION'
+            headerType: 6
+        }
+        conn.sendMessage(jid, buttonMessage, { quoted, options })
+    }
+    
+    /* send Button Video
+     * @param {String} jid 
+     * @param {String} contentText 
+     * @param {String} footer
+     * @param {String[]} buttons 
+     * @param {Object} quoted 
+     * @param {Object} options 
+     */
+      conn.sendButtonVid = async (jid, contentText, footer = global.wm, buffer, but = [], quoted, options) => {
+        let bb = await conn.getFile(buffer)
+        const buttonMessage = {
+            video: bb
+            caption: contentText,
+            footer: footer,
+            buttons: but,
+            headerType: 5
         }
         conn.sendMessage(jid, buttonMessage, { quoted, options })
     }
@@ -370,6 +389,39 @@ END:VCARD
     conn.reply = (jid, text = '', quoted, options) => {
         return Buffer.isBuffer(text) ? this.sendFile(jid, text, 'file', '', quoted, false, options) : conn.sendMessage(jid, { ...options, text, mentions: conn.parseMention(text) }, { quoted, ...options, mentions: conn.parseMention(text) })
     }
+    
+    /**
+     * send Wait
+     * @param {String} jid
+     * @param {String} message
+     */
+    conn.sendWait = async (jid) => {
+    	conn.reply(jid, global.mess.wait, 0, { thumbnail: await(await fetch(ext.thum)).buffer(), contextInfo: {
+                  externalAdReply: {
+                    mediaUrl: 'https://github.com/zevanoo',
+                    title: ext.title,
+                    body: ext.body,
+                    thumbnail: await(await fetch(ext.thum)).buffer()
+                   }}})
+       }
+       
+     /**
+     * send Fake Reply
+     * @param {String} jid
+     * @param {String} message
+     * @param {String} thumbnail
+     * @param {String} title
+     * @param {String} body
+     */
+    conn.sendFakeReply = async (jid, content, thum, title, body) => {
+    	conn.reply(jid, content, 0, { thumbnail: await(await fetch(thum)).buffer(), contextInfo: {
+                  externalAdReply: {
+                    mediaUrl: 'https://github.com/zevanoo',
+                    title: title,
+                    body: body,
+                    thumbnail: await(await fetch(thum)).buffer()
+                   }}})
+       }
     
     /**
      * send Text
@@ -520,6 +572,33 @@ END:VCARD
         return m
     }
     
+        /**
+     * parseMention
+     * @param {string} text 
+     * @returns {string[]}
+     */
+    conn.parseMention = (text = '') => {
+        return [...text.matchAll(/@([0-9]{5,16}|0)/g)].map(v => v[1] + '@s.whatsapp.net')
+    }
+    /**
+     * Read message
+     * @param {String} jid 
+     * @param {String|undefined|null} participant 
+     * @param {String} messageID 
+     */
+    conn.chatRead = async (jid, participant = conn.user.jid, messageID) => {
+        return await conn.sendReadReceipt(jid, participant, [messageID])
+    }
+
+    /**
+     * send Text with Mentions
+     * @param {String} jid
+     * @param {String} text
+     * @param {Object} quoted
+     * @param {Object} options
+     */
+     conn.sendTextWithMentions = async (jid, text, quoted, options = {}) => conn.sendMessage(jid, { text: text, contextInfo: { mentionedJid: [...text.matchAll(/@(\d{0,16})/g)].map(v => v[1] + '@s.whatsapp.net') }, ...options }, { quoted })
+     
     /**
      * load Message
      * @param {String} messageID
@@ -571,42 +650,6 @@ END:VCARD
         await fs.writeFileSync(trueFileName, buffer)
         return trueFileName
     }
-
-
-    /**
-     * parseMention
-     * @param {string} text 
-     * @returns {string[]}
-     */
-    conn.parseMention = (text = '') => {
-        return [...text.matchAll(/@([0-9]{5,16}|0)/g)].map(v => v[1] + '@s.whatsapp.net')
-    }
-    /**
-     * Read message
-     * @param {String} jid 
-     * @param {String|undefined|null} participant 
-     * @param {String} messageID 
-     */
-    conn.chatRead = async (jid, participant = conn.user.jid, messageID) => {
-        return await conn.sendReadReceipt(jid, participant, [messageID])
-    }
-
-    /**
-     * Parses string into mentionedJid(s)
-     * @param {String} text
-     */
-    conn.parseMention = (text = '') => {
-        return [...text.matchAll(/@([0-9]{5,16}|0)/g)].map(v => v[1] + '@s.whatsapp.net')
-    }
-    
-    /**
-     * send Text with Mentions
-     * @param {String} jid
-     * @param {String} text
-     * @param {Object} quoted
-     * @param {Object} options
-     */
-     conn.sendTextWithMentions = async (jid, text, quoted, options = {}) => conn.sendMessage(jid, { text: text, contextInfo: { mentionedJid: [...text.matchAll(/@(\d{0,16})/g)].map(v => v[1] + '@s.whatsapp.net') }, ...options }, { quoted })
 
     /**
      * Get name from jid
@@ -781,14 +824,13 @@ END:VCARD
     }
      
     /**
-     * 
+     * format
      * @param  {...any} args 
      * @returns 
      */
     conn.format = (...args) => {
         return util.format(...args)
     }
-    
 
     /**
      * Serialize Message, so it easier to manipulate
