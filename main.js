@@ -21,8 +21,8 @@ const { y2mateA, y2mateV } = require('./system/lib/y2mate')
 const moment = require("moment-timezone")
 const time = moment.tz('Asia/Jakarta').format("HH:mm:ss")
 const { color } = require('./system/lib/color')
+const qrcode = require('qrcode-terminal')
 let simple = require('./system/lib/simple')
-const { toBuffer } = require('qrcode')
 var low
 try {
   low = require('lowdb')
@@ -31,14 +31,6 @@ try {
 }
 const { Low, JSONFile } = low
 const mongoDB = require('./system/lib/mongoDB')
-const express = require('express')
-let app = express()
-const {
-    createServer
-} = require('http')
-let server = createServer(app)
-let _qr = 'invalid'
-let PORT = 3000 || 8000 || 8080
 
 const startNayla = async () => {
 	
@@ -68,7 +60,11 @@ global.db = new Low(
 
 global.DATABASE = global.db // Backwards Compatibility
 global.loadDatabase = async function loadDatabase() {
-  if (global.db.READ) return new Promise((resolve) => setInterval(function () { (!global.db.READ ? (clearInterval(this), resolve(global.db.data == null ? global.loadDatabase() : global.db.data)) : null) }, 1 * 1000))
+  if (global.db.READ) return new Promise((resolve) => setInterval(function () {
+  (!global.db.READ ? (clearInterval(this), 
+  resolve(global.db.data == null ? global.loadDatabase() : 
+  global.db.data)) : null) 
+  }, 1 * 60)) // Save DB/minutes
   if (global.db.data !== null) return
   global.db.READ = true
   await global.db.read()
@@ -113,34 +109,44 @@ const logger = pino({
 const connectionOptions = ({
   version,
         logger: pino({
-            level: 'silent'
-        }),
-        printQRInTerminal: true,
-        patchMessageBeforeSending: (message) => {
-            const requiresPatch = !!(
-                message.buttonsMessage ||
-                message.templateMessage ||
-                message.listMessage
-            );
-            if (requiresPatch) {
-                message = {
-                    viewOnceMessage: {
-                        message: {
-                            messageContextInfo: {
-                                deviceListMetadataVersion: 2,
-                                deviceListMetadata: {},
-                            },
-                            ...message,
-                        },
-                    },
-                };
+         level: 'silent'
+      }),
+      printQRInTerminal: true,
+      patchMessageBeforeSending: (message) => {
+         const requiresPatch = !!(
+            message.buttonsMessage ||
+            message.templateMessage ||
+            message.listMessage
+         );
+         if (requiresPatch) {
+            message = {
+               viewOnceMessage: {
+                  message: {
+                     messageContextInfo: {
+                        deviceListMetadataVersion: 2,
+                        deviceListMetadata: {},
+                     },
+                     ...message,
+                  },
+               },
             }
-            return message;
-        },
-        browser: ['Nayla Multi Device', 'Safari', '1.0.0'],
-        auth: state,
-        qrTimeout: 15000
-    })
+         }
+         return message
+      },
+      browser: ['Nayla Multi Device', 'Safari', '1.0.0'],
+      auth: state,
+      getMessage: async (key) => {
+         if (store) {
+            const msg = await store.loadMessage(key.remoteJid, key.id)
+            return msg.message || undefined
+         }
+         return {
+            conversation: 'hello'
+         }
+    },
+   qrTimeout: 15000,
+   receivedPendingNotifications: true
+   })
 
 global.conn = simple.makeWASocket(connectionOptions)
 conn.isInit = false
@@ -152,7 +158,6 @@ if (!opts['test']) {
     if (global.db.data) await global.db.write()
   }, 60 * 1000)
 }
-if (opts['big-qr']) conn.on('qr', qr => generate(qr, { small: false }))
 
 let isInit = true, handler = require('./system/handler')
 global.reloadHandler = function (restatConn) {
@@ -178,17 +183,7 @@ global.reloadHandler = function (restatConn) {
   conn.ev.on('call', conn.onCall)
   conn.ev.on('group-participants.update', conn.onParticipantsUpdate)
   conn.ev.on('message.delete', conn.onDelete)
-  
-  conn.ev.process(
-        async (events) => {
-            if (events['presence.update']) {
-                await conn.sendPresenceUpdate('available')
-            }
-            if (events['creds.update']) {
-                await saveCreds()
-            }
-        }
-    )
+  conn.ev.on('creds.update', saveCreds)
   
   conn.ev.on('connection.update', async (update) => {
         const {
@@ -196,15 +191,8 @@ global.reloadHandler = function (restatConn) {
             lastDisconnect,
             qr
         } = update
-        if (qr) {
-            app.use(async (req, res) => {
-                res.setHeader('content-type', 'image/png')
-                res.end(await toBuffer(qr))
-            })
-            app.use(express.static(path.join(__dirname, 'views')))
-            server.listen(PORT, () => {
-                console.log('App listened on port', PORT)
-            })
+        if (lastDisconnect == 'undefined' && qr != 'undefined') {
+        	global.reloadHandler(true)
         }
         if (connection === 'close') {
             let reason = new Boom(lastDisconnect?.error)?.output.statusCode
@@ -231,8 +219,9 @@ global.reloadHandler = function (restatConn) {
                 startNayla();
             } else conn.end(`Unknown DisconnectReason: ${reason}|${connection}`)
         }
-        if (update.connection == "open" || update.receivedPendingNotifications == "true") {
+        if (connection == "open" || update.receivedPendingNotifications == "true") {
             console.log('Connect, welcome owner!')
+            console.log(JSON.stringify(update, null, 4))
             console.log(`Connected to = ` + JSON.stringify(conn.user, null, 2))
         }
     })

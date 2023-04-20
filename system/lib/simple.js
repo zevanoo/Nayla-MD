@@ -30,7 +30,7 @@ exports.makeWASocket = (connectionOptions, options = {}) => {
     conn.decodeJid = (jid) => {
         if (!jid) return jid
         if (/:\d+@/gi.test(jid)) {
-            let decode = jidDecode(jid) || {}
+            const decode = jidDecode(jid) || {}
             return decode.user && decode.server && decode.user + '@' + decode.server || jid
         } else return jid
     }
@@ -179,85 +179,64 @@ exports.makeWASocket = (connectionOptions, options = {}) => {
         return isi[Math.floor(Math.random() * isi.length)]
     }
     
-         /* sendButton
-     * @param {String} jid 
-     * @param {String} contentText 
+         /**
+     * Send Buttons
+     * @param {String} jid
+     * @param {String} content
      * @param {String} footer
-     * @param {String[]} buttons 
-     * @param {Object} quoted 
-     * @param {Object} options 
+     * @param {Array} list => { "row[0]": '', "button[0]": '' } <= 
+     * @param {Object} quoted
+     * @param {Object} options
+     * @param {String} type
+     * @param {Buffer|Url} url
      */
-     conn.sendButton = async (jid, contentText = '', footer = global.wm, but = [], quoted, options = {}) => {
-        const buttonMessage = {
-            text: contentText,
-            footer: footer,
-            buttons: but,
-            headerType: 1
-        }
-        conn.sendMessage(jid, buttonMessage, { quoted, options })
-    }
-    
-    /* send Button Image
-     * @param {String} jid 
-     * @param {String} contentText 
-     * @param {String} footer
-     * @param {String[]} buttons 
-     * @param {Object} ments
-     * @param {Object} quoted 
-     * @param {Object} options 
-     */
-     conn.sendButtonImg = async (jid, contentText, footer = global.wm, buffer, but = [], quoted, options) => {
-        let img = await getBuffer(buffer)
-        const buttonMessage = {
-            image: img,
-            caption: contentText,
-            footer: footer,
-            buttons: but,
-            headerType: 4
-        }
-        conn.sendMessage(jid, buttonMessage, { quoted, options })
+    conn.sendButton = async (jid, content, footer, url, list = {}, quoted, options = {}, type) => {
+      let buffer = null
+      if (url) try { buffer = (await conn.getFile(url)).data } catch { buffer = null }
+      try{ let data = JSON.parse(JSON.stringify(list))
+      const buttonList = []
+      for(let i=0; i<(Object.keys(list).length / 2);i++){
+      	buttonList[i] = {buttonId: data['row['+i+']'], buttonText: {displayText: data['button['+i+']']}, type: 1}
       }
-      
-      /* send Button Location
-     * @param {String} jid 
-     * @param {String} contentText 
-     * @param {String} footer
-     * @param {String[]} buttons 
-     * @param {Object} quoted 
-     * @param {Object} options 
-     */
-      conn.sendButtonLoc = async (jid, contentText, footer = global.wm, buffer, but = [], quoted, options) => {
-        let bb = await conn.reSize(buffer, 300, 150)
-        const buttonMessage = {
-            location: {
-                jpegThumbnail: bb
-            },
-            caption: contentText,
+      let buttonString = JSON.stringify(buttonList)
+      if(type === 'image'){
+      	conn.sendMessage(jid, {
+      	  image: buffer, 
+            buttons: buttonList, 
+            caption: content,
             footer: footer,
-            buttons: but,
-            headerType: 6
-        }
-        conn.sendMessage(jid, buttonMessage, { quoted, options })
-    }
-    
-    /* send Button Video
-     * @param {String} jid 
-     * @param {String} contentText 
-     * @param {String} footer
-     * @param {String[]} buttons 
-     * @param {Object} quoted 
-     * @param {Object} options 
-     */
-      conn.sendButtonVid = async (jid, contentText, footer = global.wm, buffer, but = [], quoted, options) => {
-        let bb = await conn.getFile(buffer)
-        const buttonMessage = {
-            video: bb
-            caption: contentText,
+            headerType: 4,
+            ...options
+          }, { quoted })
+     } else if(type === 'location'){
+      	conn.sendMessage(jid, {
+      	  location: { jpegThumbnail: buffer }, 
+            buttons: buttonList, 
+            caption: content,
             footer: footer,
-            buttons: but,
-            headerType: 5
-        }
-        conn.sendMessage(jid, buttonMessage, { quoted, options })
+            headerType: 6,
+            jpegThumbnail: buffer, 
+            ...options
+          }, { quoted })
+     } else if(type === 'video'){
+     	conn.sendMessage(jid, {
+      	  video: buffer, 
+            buttons: buttonList, 
+            caption: content,
+            footer: footer,
+            headerType: 4,
+            ...options
+          }, { quoted })
+    } else {
+        conn.sendMessage(jid, {
+          buttons: buttonList, 
+          text: content,
+          footer: footer,
+          headerType: 1, 
+          ...options
+        }, { quoted }
+   //, { quoted, ...options }
+     ) } } catch (e) { console.log('Error: '+ e) }
     }
       
     /**
@@ -930,8 +909,8 @@ exports.smsg = (conn, m, store) => {
             m.quoted.download = () => conn.downloadMediaMessage(m.quoted)
         }
     }
-    if (m.msg.url) m.download = () => conn.downloadMediaMessage(m.msg)
-    m.text = (m.mtype == 'listResponseMessage' ? m.msg.singleSelectReply.selectedRowId : '') || m.msg.text || m.msg.caption || m.msg || ''
+    m.name = m.pushName || conn.getName(m.sender)
+    if (m.msg && m.msg.url) m.download = (saveToFile = false) => conn.downloadM(m.msg, m.mtype.replace(/message/i, ''), saveToFile)
     /**
 	* Reply to this message
 	* @param {String|Object} text 

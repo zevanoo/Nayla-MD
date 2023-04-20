@@ -9,7 +9,7 @@ const delay = ms => isNumber(ms) && new Promise(resolve => setTimeout(resolve, m
 
 module.exports = {
     async handler(chatUpdate) {
-        if (global.db.data == null) await loadDatabase()
+    	if (global.db.data == null) await loadDatabase()
         this.msgqueque = this.msgqueque || []
         // console.log(chatUpdate)
         if (!chatUpdate) return
@@ -223,7 +223,7 @@ module.exports = {
                     if (!isNumber(user.lastrampok)) user.lastrampok = 0
                     if (!('registered' in user)) user.registered = false
                     if (!user.registered) {
-                    if (!('name' in user)) user.name = this.getName(m.sender)
+                    if (!('name' in user)) user.name = conn.getName(m.sender)
         
                     if (!isNumber(user.apel)) user.apel = 0
                     if (!isNumber(user.anggur)) user.anggur = 0
@@ -401,7 +401,7 @@ module.exports = {
                     semangka: 0,
                     jeruk: 0,
                     semangka: 0,
-                    name: this.getName(m.sender),
+                    name: conn.getName(m.sender),
                     age: -1,
                     regTime: -1,
                     premium: false, 
@@ -410,7 +410,7 @@ module.exports = {
                     lbars: '[▒▒▒▒▒▒▒▒▒]', 
                     role: 'Newbie ㋡', 
                     registered: false,
-                    name: this.getName(m.sender),
+                    name: conn.getName(m.sender),
                     age: -1,
                     regTime: -1,
                     autolevelup: true,
@@ -755,7 +755,7 @@ module.exports = {
                             pp = await this.profilePictureUrl(user)
                         } catch (e) {
                         } finally {
-                            text = (action === 'add' ? (chat.sWelcome || this.welcome || conn.welcome || 'Welcome, @user!').replace('@subject', await this.getName(id)).replace('@desc', groupMetadata.desc.toString()) :
+                            text = (action === 'add' ? (chat.sWelcome || this.welcome || conn.welcome || 'Welcome, @user!').replace('@subject', await conn.getName(id)).replace('@desc', groupMetadata.desc.toString()) :
                                 (chat.sBye || this.bye || conn.bye || 'Bye, @user!')).replace('@user', '@' + user.split('@')[0])
                             this.sendFile(id, pp, 'pp.jpg', text, null, false, { mentions: [user] })
                         }
@@ -823,10 +823,8 @@ global.dfail = (type, m, conn) => {
 	let msgg = {
         unreg: mess.msg.unreg
         }[type]
-    let button = async (fetch) => {
-await conn.sendButtonLoc(m.chat, `
-${msgg}
-`, mess.wm, await(await fetch(global.ext.thum)).buffer(), [['Daftar', '.daftar']])
+    let button = async() => {
+await conn.sendButton(m.chat, msgg, mess.wm, await(await fetch(global.ext.thum)).buffer(), { row: ".daftar", button: "Daftar" })
 }
   if (msgg) return button
 }

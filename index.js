@@ -5,6 +5,8 @@ const CFonts = require('cfonts')
 const { clearF } = require('./system/lib/function')
 const chalk = require('chalk')
 const yargs = require('yargs/yargs')
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
+process.on('uncaughtException', console.error)
 
 CFonts.say('NayLa B0TZ', {
   font: 'simple',
