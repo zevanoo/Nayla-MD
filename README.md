@@ -13,7 +13,6 @@
 
 * **Semua yang selalu mendukung**
 
-
 ### Special Thanks to
 
 
