@@ -2,7 +2,7 @@
 
 # `Information`
 
-> Script ini stop update, karena [Baileys](https://github.com/sorke/Baileys) pun stop update, Jadi maaf yang sebesar-besarnya dari saya(Zevano) semoga kamu bisa mencari pengganti Script ini :)
+> Script ini sudah berakhir dan pindah ke [sini](https://github.com/zevanoo/Vanessha-MD)
 
 ---------
 
