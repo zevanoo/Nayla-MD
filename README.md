@@ -2,7 +2,7 @@
 
 # `Information`
 
-> Script ini sudah berakhir dan pindah ke [sini](https://github.com/zevanoo/Vanessha-MD)
+> Script ini sudah berakhir dan pindah ke [sini](https://github.com/zevanoo/Vanessha-MD) klik aja
 
 ---------
 
